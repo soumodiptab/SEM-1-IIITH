@@ -1,0 +1,8 @@
+Ajay|manager|account|45000
+Sunil|clerk|account|25000
+Varun|manager|sales|50000
+Amit|manager|account|47000
+Tarun|peon|sales|15000
+Deepak|clerk|sales|23000
+Sunil|peon|sales|13000
+Satvik|director|purchase|80000

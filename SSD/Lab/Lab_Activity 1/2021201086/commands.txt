@@ -1,0 +1,40 @@
+  155  ls -l
+  156  cd SSD_Lab_1
+  157  git status
+  158  git init
+  159  gedit name.txt
+  160  git status
+  161  git add .
+  162  git commit -m "Added my name"
+  163  git remote add origin https://github.com/soumodiptab/SSD_Lab_1.git
+  164  git branch
+  165  git push -u origin master
+  166  git branch
+  167  git pull
+  168  git branch other_details
+  169  git checkout other_details
+  170  gedit otherDetails.txt
+  171  git add .
+  172  git commit -m "adding other details"
+  173  git log
+  174  git checkout master
+  175  git log
+  176  gedit otherDetails.txt
+  177  git add .
+  178  git commit -m "Other details added in master"
+  179  git push
+  180  git log
+  181  git checkout other_details
+  182  git push -u origin other_details
+  183  git checkout master
+  184  git staus
+  185  git status
+  186  git pull
+  187  cd /
+  188  ls -l
+  189  cd home
+  190  history > commands.txt
+  191  ls -l
+  192  cd soumodiptab
+  193  ls -l
+  194  history > commands.txt
