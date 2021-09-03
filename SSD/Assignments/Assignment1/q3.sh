@@ -9,6 +9,7 @@ perm() {
   done
   }
 flag=0
+out=()
 perm $1 > tmp
 while read p; do
 	x=$($p --help 2>/dev/null)
