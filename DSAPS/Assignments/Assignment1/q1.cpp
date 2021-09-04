@@ -1,35 +1,68 @@
 #include<iostream>
 #include<string>
-#include<cmath>
 using namespace std;
-class BigInteger{
+class BigInt{
     private:
-    string value;
+    string val;
+    //This function adds two strings
     string add(string a,string b)
     {
-        int res_size=(a.size()>b.size())?a.size():b.size();
-        string result(res_size,'0');
-        int diff=abs((int)(a.size()-b.size()));
+        int res_length=(a.length()>b.length())?a.length():b.length();
+        string result(res_length,'0');
+        int diff=std::abs((int)(a.length()-b.length()));
+        if(a.length()>b.length())
+            b.insert(0,diff,'0');
+        else
+            a.insert(0,diff,'0');
+        int carry=0;
+        for(int i=res_length-1;i>=0;i--)
+        {
+            int tmp=(a[i]-'0')+(b[i]-0)+carry;
+            carry=0;
+            if(tmp>'9')
+            {
+                tmp-=10;
+                carry++;
+            }
+            result[i]=tmp;
+        }
+        if(carry)
+        {
+            result.insert(0,1,'1');
+        }
         return result;
     }
-    public:
-    BigInteger(string x)
+    string substract(string a,string b)
     {
-        this->value=x;
+        string result;
     }
-    BigInteger operator +(BigInteger x)
+    public:
+    BigInt(string x)
     {
-        BigInteger temp = BigInteger(add(this->value,x.value));
+        this->val=x;
+    }
+    string value()
+    {
+        return this->val;
+    }
+    BigInt operator +(BigInt x)
+    {
+        BigInt temp = BigInt(add(this->val,x.val));
         return temp;
+    }
+    BigInt operator =(BigInt x)
+    {
+        this->val=x.val;
     }
 
 };
 void test_cases()
 {
-    string x="121321",y="43564";   
-    BigInteger a=BigInteger(x);
-    BigInteger b=BigInteger(y);
-    a+b;
+    string x="121321",y="83864";   
+    BigInt a=BigInt(x);
+    BigInt b=BigInt(y);
+    BigInt c=a+b;
+    cout<<c.value()<<endl;
 }
 int main()
 {

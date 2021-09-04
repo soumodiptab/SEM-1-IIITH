@@ -1,4 +1,4 @@
-*
+/*
 Statement:​ Design and implement a data structure for LRU (Least
 Recently Used) cache. It should support the following operations:
 ○ get(key) - Get the value (will always be positive) of the key if the key

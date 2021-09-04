@@ -322,7 +322,7 @@ bool BigInteger::greater(BigInteger n1, BigInteger n2) {
 string BigInteger::add(string number1, string number2) {
     string add = (number1.length() > number2.length()) ?  number1 : number2;
     char carry = '0';
-    int differenceInLength = abs( (int) (number1.size() - number2.size()) );
+    int differenceInLength = std::abs( (int) (number1.size() - number2.size()) );
 
     if(number1.size() > number2.size())
         number2.insert(0, differenceInLength, '0'); // put zeros from left
@@ -350,7 +350,7 @@ string BigInteger::add(string number1, string number2) {
 
 string BigInteger::subtract(string number1, string number2) {
     string sub = (number1.length()>number2.length())? number1 : number2;
-    int differenceInLength = abs( (int)(number1.size() - number2.size()) );
+    int differenceInLength = std::abs( (int)(number1.size() - number2.size()) );
 
     if(number1.size() > number2.size())
         number2.insert(0, differenceInLength, '0');
