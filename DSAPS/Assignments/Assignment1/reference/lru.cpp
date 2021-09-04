@@ -75,6 +75,7 @@ void lru<T,T2>::set(T key,T2 value)	{
 
 template <typename T,typename T2>
 T2 lru<T,T2>::get(T key)	{
+	
 	if(mp.find(key)==mp.end())
 		return -1;
 	else	{

@@ -34,6 +34,9 @@ class BigInt{
     }
     string substract(string a,string b)
     {
+        int res_length=(a.length()>b.length())?a.length():b.length();
+        string result(res_length,'0');
+        int diff=std::abs((int)(a.length()-b.length()));
         string result;
     }
     public:
@@ -50,11 +53,11 @@ class BigInt{
         BigInt temp = BigInt(add(this->val,x.val));
         return temp;
     }
-    BigInt operator =(BigInt x)
+    BigInt operator -(BigInt x)
     {
-        this->val=x.val;
+        BigInt temp = BigInt(substract(this->val,x.val));
+        return temp;
     }
-
 };
 void test_cases()
 {
