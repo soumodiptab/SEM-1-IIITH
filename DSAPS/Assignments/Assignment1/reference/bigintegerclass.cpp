@@ -59,10 +59,6 @@ private:
     long long toInt(string s);
 };
 
-int main() {
-    //Your Code Here
-    return 0;
-}
 
 //------------------------------------------------------------------------------
 
@@ -446,4 +442,12 @@ long long BigInteger::toInt(string s) {
         sum = (sum*10) + (s[i] - '0');
 
     return sum;
+}
+
+int main() {
+    BigInteger a=BigInteger("5678912");
+    BigInteger b=BigInteger("853465");
+    BigInteger c=a-b;
+    cout<<c.getNumber()<<endl;
+    return 0;
 }
