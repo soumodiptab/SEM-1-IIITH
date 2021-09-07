@@ -445,9 +445,11 @@ long long BigInteger::toInt(string s) {
 }
 
 int main() {
-    BigInteger a=BigInteger("5678912");
-    BigInteger b=BigInteger("853465");
+    BigInteger a=BigInteger("56129");
+    BigInteger b=BigInteger("855");
     BigInteger c=a-b;
+    BigInteger d=a*b;
     cout<<c.getNumber()<<endl;
+    cout<<d.getNumber()<<endl;
     return 0;
 }
