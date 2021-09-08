@@ -32,6 +32,12 @@ class Node
         left=NULL;
         right=NULL;
     }
+    Node(int key)
+    {
+        this->key=key;
+        left=NULL;
+        right=NULL;
+    }
 };
 class LRU{
     Node* front;
@@ -92,7 +98,7 @@ class LRU{
         insert_node(temp);
         return val;
     }
-    int set(int key,int val)
+    void set(int key,int val)
     {
         if(cap<=0)
             return;
@@ -175,7 +181,7 @@ void driver()
 int main()
 {
     //LL_testcases();
-    //cachetest();
+    cachetest();
 
     return 0;
 }
