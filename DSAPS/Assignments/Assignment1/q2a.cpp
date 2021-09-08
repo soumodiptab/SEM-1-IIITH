@@ -13,7 +13,8 @@ front            rear
 First build operations:
 1>insert at rear
 2>delete from anywhere
-
+3>get value from key
+4>set key,value
 */
 //Doubly linked list
 class Node
@@ -93,6 +94,8 @@ class LRU{
     }
     int set(int key,int val)
     {
+        if(cap<=0)
+            return;
         Node *new_node=new Node(key,val);
         if(mp.find(key)!=mp.end())//key is already present
         {// remove from DLL , insert at rear
@@ -116,7 +119,7 @@ class LRU{
         }
         mp[key]=new_node;
     }
-    void print_dll()
+    void print_dll()//print the dll
     {
         Node *temp=front;
         while(temp!=NULL)
@@ -151,10 +154,18 @@ void LL_testcases()
 void cachetest()
 {
     LRU cache(3);
-    cache.set(1);
-    cache.set(2);
-    cache.set(3);
-    cache.set(4);
+    cache.set(1,1);
+    cache.set(2,2);
+    cache.set(3,3);
+    cache.set(4,4);
+    cout<<cache.get(1)<<endl;
+    cout<<cache.get(2)<<endl;
+    cout<<cache.get(3)<<endl;
+    cout<<"--------------------"<<endl;
+    cache.set(2,5);
+    cout<<cache.get(2)<<endl;
+    cache.set(5,5);
+    cout<<cache.get(2)<<endl;
 
 }
 void driver()
@@ -164,6 +175,7 @@ void driver()
 int main()
 {
     //LL_testcases();
-    cachetest();
+    //cachetest();
+
     return 0;
 }

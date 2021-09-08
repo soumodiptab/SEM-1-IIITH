@@ -1,5 +1,6 @@
 #include<iostream>
 #include<string>
+#include<chrono>
 using namespace std;
 class BigInt{
     private:
@@ -21,7 +22,7 @@ class BigInt{
                 return 0;
         }
     }
-    string add(string a,string b)
+    static string add(string a,string b)
     {
         int res_length=(a.length()>b.length())?a.length():b.length();
         string result(res_length,'0');
@@ -49,7 +50,7 @@ class BigInt{
         return result;
     }
     //Assuming a>b as specified in the question
-    string substract(string a,string b)
+    static string substract(string a,string b)
     {
         int res_length=a.length();
         string result(res_length,'0');
@@ -75,7 +76,7 @@ class BigInt{
         return result;
     }
     //a>b
-    string multiply(string a,string b)
+    static string multiply(string a,string b)
     {
         string result(1,'0');
         if(a.compare("0")==0 || b.compare("0")==0)
@@ -134,10 +135,6 @@ class BigInt{
         }
         return result;
     }
-    string factorial(unsigned long long n)
-    {
-        
-    }
     public:
     BigInt(string x)
     {
@@ -172,20 +169,45 @@ class BigInt{
         BigInt temp = BigInt(binary_expo(this->val,b));
         return temp;
     }
+    static string factorial(unsigned long long n)
+    {
+        string result="1";
+        for(unsigned long long i=2;i<=n;i++)
+        {
+            result=multiply(result,to_string(i));
+        }
+        return result;
+    }
 };
 void test_cases()
 {
-    string x="1210",y="58098";   
+    string x="121023",y="58098";   
     BigInt a=BigInt(x);
     BigInt b=BigInt(y);
+    auto start = chrono::high_resolution_clock::now();
     BigInt c=a+b;
+    auto stop = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
+    cout<<"Add: "<<c.value()<<endl;
+    cout << duration.count() <<"ms"<< endl;
+    //-----------------------------------------------------------------------------
     BigInt d=a-b;
     BigInt e=a*b;
-    BigInt f=a.power(3);
-    cout<<"Add: "<<c.value()<<endl;
     cout<<"Substract: "<<d.value()<<endl;
     cout<<"Multiply: "<<e.value()<<endl;
+    //-----------------------------------------------------------------------------
+    start = chrono::high_resolution_clock::now();
+    BigInt f=a.power(999);
     cout<<"Power: "<<f.value()<<endl;
+    stop = chrono::high_resolution_clock::now();
+    duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
+    cout << duration.count() <<"ms"<< endl;
+    //-----------------------------------------------------------------------------
+    start = chrono::high_resolution_clock::now();
+    cout<<"Factorial: "<<BigInt::factorial(1000)<<endl;
+    stop = chrono::high_resolution_clock::now();
+    duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
+    cout << duration.count() <<"ms"<< endl;
 }
 int main()
 {
