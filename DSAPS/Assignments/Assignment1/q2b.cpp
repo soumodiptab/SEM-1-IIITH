@@ -1,6 +1,7 @@
 #include<iostream>
 #include<string>
 #include<unordered_map>
+#include<map>
 using namespace std;
 class Node
 {
@@ -102,7 +103,7 @@ class LFU{
     int cap,size;
     unordered_map<int,int>key_value;
     unordered_map<int,int>key_freq;
-    unordered_map<int,hashed_list>freq_list;
+    map<int,hashed_list>freq_list;
     public:
     LFU(int capacity)
     {
