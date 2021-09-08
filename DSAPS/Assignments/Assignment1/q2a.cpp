@@ -77,7 +77,7 @@ class LRU{
         front=NULL;
         rear=NULL;
     }
-    int get_val(int key)
+    int get(int key)
     {
         if(mp.find(key)==mp.end()) // if key not found
         {
@@ -91,7 +91,7 @@ class LRU{
         insert_node(temp);
         return val;
     }
-    int set_val(int key,int val)
+    int set(int key,int val)
     {
         Node *new_node=new Node(key,val);
         if(mp.find(key)!=mp.end())//key is already present
@@ -151,7 +151,15 @@ void LL_testcases()
 void cachetest()
 {
     LRU cache(3);
+    cache.set(1);
+    cache.set(2);
+    cache.set(3);
+    cache.set(4);
 
+}
+void driver()
+{
+    
 }
 int main()
 {

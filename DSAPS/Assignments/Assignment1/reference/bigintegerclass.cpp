@@ -449,7 +449,10 @@ int main() {
     BigInteger b=BigInteger("855");
     BigInteger c=a-b;
     BigInteger d=a*b;
+    BigInteger e=a/b;
     cout<<c.getNumber()<<endl;
     cout<<d.getNumber()<<endl;
+    cout<<e.getNumber()<<endl;
+    
     return 0;
 }
