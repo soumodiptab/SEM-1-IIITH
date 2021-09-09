@@ -2,6 +2,48 @@
 #include<string>
 #include<chrono>
 using namespace std;
+template <typename T>
+class stack
+{
+    int top;
+    int capacity=100;
+    T *arr;
+    public:
+    stack()
+    {
+        arr=new T[capacity];
+        top=-1;
+    }
+    void enlarge()
+    {
+        capacity*=2;
+        T *new_arr=new T[capacity];
+        for(int i=top;i>=0;i--)
+            new_arr[i]=arr[i];
+        delete [] arr;
+        arr=new_arr;
+    }
+    void push(T c)
+    {
+        if(top<capacity)
+            enlarge();
+        arr[++top]=c;
+    }
+    void pop()
+    {
+        if(top==-1)
+            return;
+        top--;
+    }
+    T peek()
+    {
+        return arr[top];
+    }
+    bool isEmpty()
+    {
+        return (top==-1)?true:false;
+    }
+};
 class BigInt{
     private:
     string val;
@@ -178,12 +220,100 @@ class BigInt{
         }
         return result;
     }
+    static int identify(char c)
+    {//0-unknown 1-number 2-operator
+        if(c>='0'&&c<='9')
+            return 1;
+        if(c=='+'||c=='-'||c=='x')
+            return 2;
+        return 0;
+    }
+    static int priority(char c)
+    {
+        if(c=='+'||c=='-')
+            return 1;
+        if(c=='x')
+            return 2;
+        return 0;
+    }
+    string static apply(string &a,string &b,char op)
+    {
+        switch(op)
+        {
+            case '+':
+            return add(a,b);
+            case '-':
+            return substract(a,b);
+            case 'x':
+            return multiply(a,b);
+        }
+    }
+    static void error_message()
+    {
+        cout<<"[INFO]:[ERROR Incorrect Expression]"<<endl;
+    }
+    static string expr_evaluator(string exp)
+    {
+        stack<char> operators;
+        stack<string> operands;
+        for(int i=0;i<exp.length();i++)
+        {
+            int ch=identify(exp[i]);
+            if(ch==0)//incorrect character
+            {
+                error_message();
+                return NULL;
+            }
+            else if(ch==1)//operand
+            {
+                int j=i;
+                while(j<exp.length()&&identify(exp[j])==1)
+                {
+                    j++;
+                }
+                if(j<exp.length()&& identify(exp[j])==0)
+                {
+                    error_message();
+                    return NULL;
+                }
+                string temp=exp.substr(i,j-i);
+                i=j-1;
+                operands.push(temp);
+            }
+            else//operator
+            {
+                while(!operators.isEmpty() && priority(operators.peek())>=priority(exp[i]))
+                {
+                    string second=operands.peek();
+                    operands.pop();
+                    string first=operands.peek();
+                    operands.pop();
+                    char op=operators.peek();
+                    operators.pop();
+                    string result=apply(first,second,op);
+                    operands.push(result);
+                }
+                operators.push(exp[i]);
+            }
+        }
+        while(!operators.isEmpty())
+        {
+            string second=operands.peek();
+            operands.pop();
+            string first=operands.peek();
+            operands.pop();
+            char op=operators.peek();
+            operators.pop();
+            string result=apply(first,second,op);
+            operands.push(result);
+        }
+        return operands.peek();
+    }
 };
 void test_cases()
-{
-    string x="121023",y="58098";   
-    BigInt a=BigInt(x);
-    BigInt b=BigInt(y);
+{ 
+    BigInt a=BigInt("121023");
+    BigInt b=BigInt("58098");
     auto start = chrono::high_resolution_clock::now();
     BigInt c=a+b;
     auto stop = chrono::high_resolution_clock::now();
@@ -208,6 +338,13 @@ void test_cases()
     stop = chrono::high_resolution_clock::now();
     duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
     cout << duration.count() <<"ms"<< endl;
+    //-----------------------------------------------------------------------------
+    start = chrono::high_resolution_clock::now();
+    cout<<BigInt::expr_evaluator("2908+3x28+98-25x12")<<endl;
+    stop = chrono::high_resolution_clock::now();
+    duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
+    cout << duration.count() <<"ms"<< endl;
+    //-----------------------------------------------------------------------------
 }
 int main()
 {

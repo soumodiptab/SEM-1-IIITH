@@ -7,17 +7,8 @@ class Node
 {
     public:
     int key;
-    int val;
     Node* left;
     Node* right;
-    //Initialize the pointers with NULL
-    Node(int key,int value)
-    {
-        this->key=key;
-        val=value;
-        left=NULL;
-        right=NULL;
-    }
     Node(int key)
     {
         this->key=key;
@@ -33,7 +24,7 @@ class hashed_list
     insert node at rear
     erase function or delete any node
     */
-   int sz=0;
+    int sz=0;
     private:
     Node* front;
     Node* rear;
@@ -68,7 +59,7 @@ class hashed_list
             target->left->right=target->right;
         if(target->right != NULL)
             target->right->left=target->left;
-        free(target);
+        delete target;
     }
     public:
     int head()

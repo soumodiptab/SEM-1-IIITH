@@ -75,7 +75,7 @@ class LRU{
             target->left->right=target->right;
         if(target->right != NULL)
             target->right->left=target->left;
-        free(target);
+        delete target;
     }
     LRU(int capacity)
     {
