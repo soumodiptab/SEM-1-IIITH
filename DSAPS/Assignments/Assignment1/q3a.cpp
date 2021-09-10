@@ -136,7 +136,10 @@ class SparseMatrix{
                 {
                     temp.insert(iter_a,iter_b,sum);
                 }
-                while(iter_b<b.size &&)
+                while(iter_b<b.size)
+                {
+
+                }
             }
         }
     }
@@ -145,7 +148,7 @@ class SparseMatrix{
         cout<<"--------------------------"<<endl;
         cout<<"dim: "<<rows<<"x"<<cols<<endl;
         cout<<"--------------------------"<<endl;
-        cout << "row\tcol\tvalue\n";
+        cout << "r\tc\tv\n";
         cout<<"--------------------------"<<endl;
         for (int i = 0; i < size; i++)
         {

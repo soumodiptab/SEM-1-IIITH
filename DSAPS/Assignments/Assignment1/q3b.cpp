@@ -3,12 +3,12 @@ using namespace std;
 template <typename T>
 class Node
 {
+    public:
     int row;
     int col;
     T value;
     Node *left;
     Node *right;
-    public:
     Node(int row,int col,T value)
     {
         this->row=row;
@@ -17,7 +17,7 @@ class Node
         left=NULL;
         right=NULL;
     }
-    swap()
+    void swap()
     {
         int temp=row;
         row=col;
@@ -37,7 +37,8 @@ class SparseMatrix
         this->rows=rows;
         this->cols=cols;
         front=NULL;
-        rear=NULL:
+        rear=NULL;
+        size=0;
     }
     void insert(Node<T>* new_node)
     {//Insert ar rear
@@ -56,11 +57,71 @@ class SparseMatrix
     }
     void insert(int i, int j ,T value)
     {
-        Node<T>* new_node=new Node()
+        Node<T>* new_node= new Node<T>(i,j,value);
+        insert(new_node);
+        size++;
     }
     SparseMatrix<T> add(SparseMatrix b)
     {
         SparseMatrix<T> temp(rows,cols);
+        Node<T>* iter_a=front;
+        Node<T>* iter_b=b.front;
+        while(iter_a!=NULL && iter_b!=NULL)
+        {
+            if(iter_a->row==iter_b->row && iter_a->col==iter_b->col)
+            {
+                T val=iter_a->value+iter_b->value;
+                if(val!=0)
+                {
+                    temp.insert(iter_a->row,iter_b->col,val);
+                }
+                iter_a=iter_a->right;
+                iter_b=iter_b->right;
+            }
+            else if(iter_a->row<iter_b->row || (iter_a->row==iter_b->row && iter_a->col<iter_b->col))
+            {
+                temp.insert(iter_a->row,iter_a->col,iter_a->value);
+                iter_a=iter_a->right;
+            }
+            else
+            {
+                temp.insert(iter_b->row,iter_b->col,iter_b->value);
+                iter_b=iter_b->right;
+            }
+        }
+        while(iter_a!=NULL)
+        {
+            temp.insert(iter_a->row,iter_a->col,iter_a->value);
+            iter_a=iter_a->right;
+        }
+        while(iter_b!=NULL)
+        {
+            temp.insert(iter_b->row,iter_b->col,iter_b->value);
+            iter_b=iter_b->right;
+        }
+        return temp;
+    }
+    void sort(SparseMatrix x)
+    {
+        Node<T>*iter1=x.front;
+        Node<T>*q=x.front;
+        while(iter!=NULL)
+        {
+            if()
+            iter=iter->right;
+        }
+    }
+    SparseMatrix<T>transpose()
+    {
+        SparseMatrix<T>temp(cols,rows);
+        Node<T>*iter=front;
+        while(iter!=NULL)
+        {
+            temp.insert(iter->col,iter->row,iter->value);
+            iter=iter->right;
+        }
+        sort(temp);
+        return temp;
     }
     void print()
     {
@@ -68,7 +129,7 @@ class SparseMatrix
         cout<<"--------------------------"<<endl;
         cout<<"dim: "<<rows<<"x"<<cols<<endl;
         cout<<"--------------------------"<<endl;
-        cout << "row\tcol\tvalue\n";
+        cout << "r\tc\tv\n";
         cout<<"--------------------------"<<endl;
         while(temp!=NULL)
         {
@@ -94,9 +155,9 @@ void driver()
     cout<<"A :"<<endl;
     initializer(a,mat,3,4);
     a.print();
-    cout<<"A Transpose :"<<endl;
-    //SparseMatrix<int>at=a.transpose();
-    //at.print();
+    /*cout<<"A Transpose :"<<endl;
+    SparseMatrix<int>at=a.transpose();
+    at.print();*/
     cout<<"B :"<<endl;
     SparseMatrix<int>b(3,4);
     initializer(b,mat2,3,4);
