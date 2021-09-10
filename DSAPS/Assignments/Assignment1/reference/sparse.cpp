@@ -44,7 +44,7 @@ void multiply(sparse_matrix b)
                 // iterate over all elements with
                 // same row and col value
                 // to calculate result[r]
-                while (tempa < len && data[tempa][0] == r &&
+                while (tempa < len &&  [tempa][0] == r &&
                        tempb < b.len && b.data[tempb][0] == c)
                 {
                     if (data[tempa][1] < b.data[tempb][1])

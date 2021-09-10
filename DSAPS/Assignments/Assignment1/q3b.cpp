@@ -55,6 +55,23 @@ class SparseMatrix
             rear=new_node;
         }
     }
+    void delete_node(Node<T>* target)
+    {//delete from : <front> <middle> <rear>
+        if(target->left == NULL)//i.e. front node
+        {
+            front=target->right;
+        }
+        if(target->right == NULL)//i.e. rear node
+        {
+            rear=target->left;
+        }
+        //for middle nodes
+        if(target->left != NULL)
+            target->left->right=target->right;
+        if(target->right != NULL)
+            target->right->left=target->left;
+        delete target;
+    }
     void insert(int i, int j ,T value)
     {
         Node<T>* new_node= new Node<T>(i,j,value);
@@ -101,14 +118,33 @@ class SparseMatrix
         }
         return temp;
     }
+    void swap(Node<T>* a,Node<T>* b)
+    {
+        T temp_val=a->value;
+        int temp_row=a->row;
+        int temp_col=a->col;
+        a->value=b->value;
+        a->row=b->row;
+        a->col=b->col;
+        b->value=temp_val;
+        b->row=temp_row;
+        b->col=temp_col;
+    }
     void sort(SparseMatrix x)
     {
         Node<T>*iter1=x.front;
-        Node<T>*q=x.front;
-        while(iter!=NULL)
+        while(iter1!=NULL)
         {
-            if()
-            iter=iter->right;
+            Node<T>*iter2=iter1->right;
+            while(iter2!=NULL)
+            {
+                if(iter2->row<iter1->row ||(iter2->row==iter1->row && iter2->col<iter1->col))
+                {
+                    swap(iter1,iter2);
+                }
+                iter2=iter2->right;
+            }
+            iter1=iter1->right;
         }
     }
     SparseMatrix<T>transpose()
@@ -121,6 +157,55 @@ class SparseMatrix
             iter=iter->right;
         }
         sort(temp);
+        return temp;
+    }
+    void combine(SparseMatrix x)
+    {
+        Node<T>*iter1=x.front;
+        while(iter1!=NULL)
+        {
+            Node<T>*iter2=iter1->right;
+            while(iter2!=NULL && (iter1->row==iter2->row && iter2->col==iter2->col))
+            {
+                Node<T>*del_node=iter2;
+                iter2=iter2->right;
+                iter1->value=iter1->value+iter2->value;
+                delete_node(del_node);
+            }
+            iter1=iter1->right;
+        }
+        iter1=x.front;
+        while(iter1!=NULL)
+        {
+            Node<T>*del_node=iter1;
+            iter1=iter1->right;
+            if(del_node->value==0)
+            {
+                delete_node(del_node);
+            }
+        }
+    }
+    SparseMatrix<T>multiply(SparseMatrix b)
+    {
+        SparseMatrix<T>bt=b.transpose();
+        SparseMatrix<T>temp(rows,b.cols);
+        Node<T>*itera=front;
+        while(itera!=NULL)
+        {
+            Node<T>*iterb=bt.front;
+            while(iterb!=NULL)
+            {
+                if(itera->col==iterb->col)
+                {
+                    T val=itera->value*iterb->value;
+                    temp.insert(itera->row,iterb->row,val);
+                }
+                iterb=iterb->right;
+            }
+            itera=itera->right;
+        }
+        sort(temp);
+        combine(temp);
         return temp;
     }
     void print()
@@ -149,22 +234,25 @@ void initializer(SparseMatrix<T> &a,T matrix[][4],int row,int col)
 }
 void driver()
 {
-    int mat[][4]={{0,5,0,6},{2,0,4,0},{0,0,7,0}};
-    int mat2[][4]={{2,3,0,1},{0,0,0,5},{0,1,-7,0}};
-    SparseMatrix<int>a(3,4);
+    int mat[][4]={{0,10,4,2},{0,0,0,0},{0,0,3,0},{4,2,0,0}};
+    int mat2[][4]={{0,3,1,0},{0,0,0,2},{0,3,0,0},{0,0,5,0}};
+    SparseMatrix<int>a(4,4);
+    initializer(a,mat,4,4);
+    SparseMatrix<int>b(4,4);
+    initializer(b,mat2,4,4);
     cout<<"A :"<<endl;
-    initializer(a,mat,3,4);
     a.print();
-    /*cout<<"A Transpose :"<<endl;
+    cout<<"A Transpose :"<<endl;
     SparseMatrix<int>at=a.transpose();
-    at.print();*/
+    at.print();
     cout<<"B :"<<endl;
-    SparseMatrix<int>b(3,4);
-    initializer(b,mat2,3,4);
     b.print();
     cout<<"A+B :"<<endl;
     SparseMatrix<int>sum=a.add(b);
     sum.print();
+    cout<<"A*B :"<<endl;
+    SparseMatrix<int>mul=a.multiply(b);
+    mul.print();
 
 }
 int main()

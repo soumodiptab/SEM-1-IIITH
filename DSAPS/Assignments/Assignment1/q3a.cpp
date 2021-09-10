@@ -183,23 +183,22 @@ void initializer(SparseMatrix<T> &a,T matrix[][4],int row,int col)
 }
 void driver()
 {
-    int mat[][4]={{0,5,0,6},{2,0,4,0},{0,0,7,0}};
-    int mat2[][4]={{2,3,0,1},{0,0,0,5},{0,1,-7,0}};
-    SparseMatrix<int>a(3,4);
+    int mat[][4]={{0,10,4,2},{0,0,0,0},{0,0,3,0},{4,2,0,0}};
+    int mat2[][4]={{0,3,1,0},{0,0,0,2},{0,3,0,0},{0,0,5,0}};
+    SparseMatrix<int>a(4,4);
     cout<<"A :"<<endl;
-    initializer(a,mat,3,4);
+    initializer(a,mat,4,4);
     a.print();
     cout<<"A Transpose :"<<endl;
     SparseMatrix<int>at=a.transpose();
     at.print();
     cout<<"B :"<<endl;
-    SparseMatrix<int>b(3,4);
-    initializer(b,mat2,3,4);
+    SparseMatrix<int>b(4,4);
+    initializer(b,mat2,4,4);
     b.print();
     cout<<"A+B :"<<endl;
     SparseMatrix<int>sum=a.add(b);
     sum.print();
-
 }
 int main()
 {

@@ -172,7 +172,6 @@ void cachetest()
     cout<<cache.get(2)<<endl;
     cache.set(5,5);
     cout<<cache.get(2)<<endl;
-
 }
 void driver()
 {
@@ -182,6 +181,5 @@ int main()
 {
     //LL_testcases();
     cachetest();
-
     return 0;
 }
