@@ -130,7 +130,7 @@ class SparseMatrix
         b->row=temp_row;
         b->col=temp_col;
     }
-    void sort(SparseMatrix x)
+    void sort(SparseMatrix &x)
     {
         Node<T>*iter1=x.front;
         while(iter1!=NULL)
@@ -159,17 +159,18 @@ class SparseMatrix
         sort(temp);
         return temp;
     }
-    void combine(SparseMatrix x)
+    void combine(SparseMatrix &x)
     {
+
         Node<T>*iter1=x.front;
         while(iter1!=NULL)
         {
             Node<T>*iter2=iter1->right;
-            while(iter2!=NULL && (iter1->row==iter2->row && iter2->col==iter2->col))
+            while(iter2!=NULL && (iter1->row==iter2->row && iter1->col==iter2->col))
             {
                 Node<T>*del_node=iter2;
-                iter2=iter2->right;
                 iter1->value=iter1->value+iter2->value;
+                iter2=iter2->right;
                 delete_node(del_node);
             }
             iter1=iter1->right;
@@ -181,7 +182,7 @@ class SparseMatrix
             iter1=iter1->right;
             if(del_node->value==0)
             {
-                delete_node(del_node);
+                x.delete_node(del_node);
             }
         }
     }
@@ -234,12 +235,13 @@ void initializer(SparseMatrix<T> &a,T matrix[][4],int row,int col)
 }
 void driver()
 {
-    int mat[][4]={{0,10,4,2},{0,0,0,0},{0,0,3,0},{4,2,0,0}};
-    int mat2[][4]={{0,3,1,0},{0,0,0,2},{0,3,0,0},{0,0,5,0}};
+    int mat[][4]={{1,3,0,0},{0,0,2,0},{0,2,0,0},{0,0,0,0}};
+    int mat2[][4]={{3,0,0,0},{-1,0,0,9},{0,0,0,0},{0,1,0,0}};
     SparseMatrix<int>a(4,4);
     initializer(a,mat,4,4);
     SparseMatrix<int>b(4,4);
     initializer(b,mat2,4,4);
+    /*
     cout<<"A :"<<endl;
     a.print();
     cout<<"A Transpose :"<<endl;
@@ -251,6 +253,7 @@ void driver()
     SparseMatrix<int>sum=a.add(b);
     sum.print();
     cout<<"A*B :"<<endl;
+    */
     SparseMatrix<int>mul=a.multiply(b);
     mul.print();
 

@@ -108,9 +108,15 @@ class SparseMatrix{
         }
         //Inserting the remaining elements
         while(iter_a<size)
+        {
             temp.insert(row[iter_a],col[iter_a],value[iter_a]);
+            iter_a++;
+        }
         while(iter_b<b.size)
+        {
             temp.insert(b.row[iter_b],b.col[iter_b],b.value[iter_b]);
+            iter_b++;
+        }
         return temp;
     }
     SparseMatrix<T> multiply(SparseMatrix b)
@@ -183,22 +189,27 @@ void initializer(SparseMatrix<T> &a,T matrix[][4],int row,int col)
 }
 void driver()
 {
-    int mat[][4]={{0,10,4,2},{0,0,0,0},{0,0,3,0},{4,2,0,0}};
-    int mat2[][4]={{0,3,1,0},{0,0,0,2},{0,3,0,0},{0,0,5,0}};
+    int mat[][4]={{1,3,0,0},{0,0,2,0},{0,2,0,0},{0,0,0,0}};
+    int mat2[][4]={{3,0,0,0},{-1,0,0,9},{0,0,0,0},{0,1,0,0}};
     SparseMatrix<int>a(4,4);
-    cout<<"A :"<<endl;
     initializer(a,mat,4,4);
+    SparseMatrix<int>b(4,4);
+    initializer(b,mat2,4,4);
+    /*
+    cout<<"A :"<<endl;
     a.print();
     cout<<"A Transpose :"<<endl;
     SparseMatrix<int>at=a.transpose();
     at.print();
     cout<<"B :"<<endl;
-    SparseMatrix<int>b(4,4);
-    initializer(b,mat2,4,4);
     b.print();
     cout<<"A+B :"<<endl;
     SparseMatrix<int>sum=a.add(b);
     sum.print();
+    cout<<"A*B :"<<endl;
+    */
+    SparseMatrix<int>mul=a.multiply(b);
+    mul.print();
 }
 int main()
 {
