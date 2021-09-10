@@ -119,35 +119,84 @@ class SparseMatrix{
         }
         return temp;
     }
-    SparseMatrix<T> multiply(SparseMatrix b)
+    void swap(int i,int j)
     {
-        SparseMatrix temp(row,b.col);
-        SparseMatrix bt=b.transpose();
-        int iter_a=0;
-        while(iter_a<size)//row pos in original mat
+        T temp_val=value[i];
+        int temp_row=row[i];
+        int temp_col=col[i];
+        value[i]=value[j];
+        row[i]=row[j];
+        col[i]=col[j];
+        value[j]=temp_val;
+        row[j]=temp_row;
+        col[j]=temp_col;
+    }
+    void sort()
+    {
+        for(int i=0;i<size-1;i++)
         {
-            int iter_b=0;
-            while(iter_b<bt.size)//col pos in original mat
+            for(int j=i+1;j<size;j++)
             {
-                int i=iter_a,j=iter_b;
-                T sum=0;
-                while((i<size&&j<bt.size)&&(row[i]==row[iter_a]&&bt.row[j]==bt.row[iter_b]))
+                if(row[j]<row[i]||(row[i]==row[j]&&col[j]<col[i]))
                 {
-                    if(col[i]==bt.col[j])
-                    {
-                        sum+=value[i]*bt.value[j];
-                    }
-                }
-                if(sum!=0)
-                {
-                    temp.insert(iter_a,iter_b,sum);
-                }
-                while(iter_b<b.size)
-                {
-
+                    swap(i,j);
                 }
             }
         }
+    }
+    void combine()
+    {
+        //mark for deletion
+        int temp_size=size;
+        for(int i=0;i<size-1;i++)
+        {
+            for(int j=i+1;j<size;j++)
+            {
+                if(row[i]==row[j]&&col[i]==col[j])
+                {
+                    row[j]=-1;
+                    col[j]=-1;
+                    value[i]=value[i]+value[j];
+                }
+            }
+        }
+        int i=0;
+        while(i<size)
+        {
+            int j=i;
+            while(j<size&&((row[j]==-1&&col[j]==-1)||value[j]==0))
+            {
+                temp_size--;
+                j++;
+            }
+            if(j==size)
+                break;
+            row[i]=row[j];
+            col[i]=col[j];
+            value[i]=value[j];
+            i=j+1;
+        }
+        size=temp_size;
+    }
+    SparseMatrix<T> multiply(SparseMatrix b)
+    {
+        SparseMatrix bt=b.transpose();
+        SparseMatrix temp(rows,bt.cols);
+        for(int itera=0;itera<size;itera++)
+        {
+            for(int iterb=0;iterb<bt.size;iterb++)
+            {
+                if(col[itera]==bt.col[iterb])
+                {
+                    T val=value[itera]*bt.value[iterb];
+                    temp.insert(row[itera],bt.row[iterb],val);
+                }
+            }
+        }
+        temp.print();
+        temp.sort();
+        temp.combine();
+        return temp;
     }
     void print()
     {
@@ -189,8 +238,8 @@ void initializer(SparseMatrix<T> &a,T matrix[][4],int row,int col)
 }
 void driver()
 {
-    int mat[][4]={{1,3,0,0},{0,0,2,0},{0,2,0,0},{0,0,0,0}};
-    int mat2[][4]={{3,0,0,0},{-1,0,0,9},{0,0,0,0},{0,1,0,0}};
+    int mat[][4]={{0,10,4,2},{0,0,0,0},{0,0,3,0},{4,2,0,0}};
+    int mat2[][4]={{0,3,1,0},{0,0,0,2},{0,3,0,0},{0,0,5,0}};
     SparseMatrix<int>a(4,4);
     initializer(a,mat,4,4);
     SparseMatrix<int>b(4,4);
@@ -206,8 +255,8 @@ void driver()
     cout<<"A+B :"<<endl;
     SparseMatrix<int>sum=a.add(b);
     sum.print();
-    cout<<"A*B :"<<endl;
     */
+    cout<<"A*B :"<<endl;
     SparseMatrix<int>mul=a.multiply(b);
     mul.print();
 }

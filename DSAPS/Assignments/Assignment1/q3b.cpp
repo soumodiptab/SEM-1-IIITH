@@ -17,12 +17,6 @@ class Node
         left=NULL;
         right=NULL;
     }
-    void swap()
-    {
-        int temp=row;
-        row=col;
-        col=temp;
-    }
 };
 template <typename T>
 class SparseMatrix
@@ -172,6 +166,7 @@ class SparseMatrix
                 iter1->value=iter1->value+iter2->value;
                 iter2=iter2->right;
                 delete_node(del_node);
+                size--;
             }
             iter1=iter1->right;
         }
@@ -183,6 +178,7 @@ class SparseMatrix
             if(del_node->value==0)
             {
                 x.delete_node(del_node);
+                size--;
             }
         }
     }
