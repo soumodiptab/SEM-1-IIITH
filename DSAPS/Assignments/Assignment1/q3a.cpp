@@ -81,7 +81,7 @@ class SparseMatrix{
         }
         return temp;
     }
-    SparseMatrix<T> add(SparseMatrix b)
+    SparseMatrix<T> add(SparseMatrix<T> b)
     {
         SparseMatrix<T> temp(rows,cols);
         int iter_a=0,iter_b=0;
@@ -147,7 +147,6 @@ class SparseMatrix{
     void combine()
     {
         //mark for deletion
-        int temp_size=size;
         for(int i=0;i<size-1;i++)
         {
             for(int j=i+1;j<size;j++)
@@ -160,13 +159,11 @@ class SparseMatrix{
                 }
             }
         }
-        int i=0;
-        while(i<size)
+        int i=0,j=0;// j finds valid row,col,value
+        while(j<size)
         {
-            int j=i;
             while(j<size&&((row[j]==-1&&col[j]==-1)||value[j]==0))
             {
-                temp_size--;
                 j++;
             }
             if(j==size)
@@ -174,14 +171,15 @@ class SparseMatrix{
             row[i]=row[j];
             col[i]=col[j];
             value[i]=value[j];
-            i=j+1;
+            i++;
+            j++;
         }
-        size=temp_size;
+        size=i;
     }
-    SparseMatrix<T> multiply(SparseMatrix b)
+    SparseMatrix<T> multiply(SparseMatrix<T> b)
     {
-        SparseMatrix bt=b.transpose();
-        SparseMatrix temp(rows,bt.cols);
+        SparseMatrix<T> bt=b.transpose();
+        SparseMatrix<T> temp(rows,bt.cols);
         for(int itera=0;itera<size;itera++)
         {
             for(int iterb=0;iterb<bt.size;iterb++)
@@ -193,7 +191,6 @@ class SparseMatrix{
                 }
             }
         }
-        temp.print();
         temp.sort();
         temp.combine();
         return temp;
@@ -211,22 +208,6 @@ class SparseMatrix{
         }
         cout<<"--------------------------"<<endl;
     }
-    //Prints entire matrix along with zeros--not implemented
-    /*void print_full(){
-        int i=0,j=0;
-        for(int k=0;i<size;)
-        {
-            if(i==row[k]&&j==col[k]&&val[k]!=0)
-            {
-
-            }
-            else
-            {
-                cout<<"0 ";
-            }
-            if(j==size)
-        }
-    }*/
 };
 template <typename T>
 void initializer(SparseMatrix<T> &a,T matrix[][4],int row,int col)
@@ -236,15 +217,14 @@ void initializer(SparseMatrix<T> &a,T matrix[][4],int row,int col)
             if(matrix[i][j])
                 a.insert(i,j,matrix[i][j]);
 }
-void driver()
+void test()
 {
-    int mat[][4]={{0,10,4,2},{0,0,0,0},{0,0,3,0},{4,2,0,0}};
-    int mat2[][4]={{0,3,1,0},{0,0,0,2},{0,3,0,0},{0,0,5,0}};
+    int mat[][4]={{1,3,0,0},{0,0,2,0},{0,2,0,0},{0,0,0,0}};
+    int mat2[][4]={{3,0,0,0},{-1,0,0,9},{0,0,0,0},{0,1,0,0}};
     SparseMatrix<int>a(4,4);
     initializer(a,mat,4,4);
     SparseMatrix<int>b(4,4);
     initializer(b,mat2,4,4);
-    /*
     cout<<"A :"<<endl;
     a.print();
     cout<<"A Transpose :"<<endl;
@@ -255,13 +235,16 @@ void driver()
     cout<<"A+B :"<<endl;
     SparseMatrix<int>sum=a.add(b);
     sum.print();
-    */
     cout<<"A*B :"<<endl;
     SparseMatrix<int>mul=a.multiply(b);
     mul.print();
 }
+void driver()
+{
+
+}
 int main()
 {
-    driver();
+    test();
     return 0;
 }

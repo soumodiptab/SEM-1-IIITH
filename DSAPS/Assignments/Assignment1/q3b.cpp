@@ -124,9 +124,9 @@ class SparseMatrix
         b->row=temp_row;
         b->col=temp_col;
     }
-    void sort(SparseMatrix &x)
+    void sort()
     {
-        Node<T>*iter1=x.front;
+        Node<T>*iter1=front;
         while(iter1!=NULL)
         {
             Node<T>*iter2=iter1->right;
@@ -150,13 +150,13 @@ class SparseMatrix
             temp.insert(iter->col,iter->row,iter->value);
             iter=iter->right;
         }
-        sort(temp);
+        temp.sort();
         return temp;
     }
-    void combine(SparseMatrix &x)
+    void combine()
     {
 
-        Node<T>*iter1=x.front;
+        Node<T>*iter1=front;
         while(iter1!=NULL)
         {
             Node<T>*iter2=iter1->right;
@@ -170,14 +170,14 @@ class SparseMatrix
             }
             iter1=iter1->right;
         }
-        iter1=x.front;
+        iter1=front;
         while(iter1!=NULL)
         {
             Node<T>*del_node=iter1;
             iter1=iter1->right;
             if(del_node->value==0)
             {
-                x.delete_node(del_node);
+                delete_node(del_node);
                 size--;
             }
         }
@@ -201,8 +201,8 @@ class SparseMatrix
             }
             itera=itera->right;
         }
-        sort(temp);
-        combine(temp);
+        temp.sort();
+        temp.combine();
         return temp;
     }
     void print()
@@ -229,7 +229,7 @@ void initializer(SparseMatrix<T> &a,T matrix[][4],int row,int col)
             if(matrix[i][j])
                 a.insert(i,j,matrix[i][j]);
 }
-void driver()
+void test()
 {
     int mat[][4]={{1,3,0,0},{0,0,2,0},{0,2,0,0},{0,0,0,0}};
     int mat2[][4]={{3,0,0,0},{-1,0,0,9},{0,0,0,0},{0,1,0,0}};
@@ -237,7 +237,6 @@ void driver()
     initializer(a,mat,4,4);
     SparseMatrix<int>b(4,4);
     initializer(b,mat2,4,4);
-    /*
     cout<<"A :"<<endl;
     a.print();
     cout<<"A Transpose :"<<endl;
@@ -249,13 +248,15 @@ void driver()
     SparseMatrix<int>sum=a.add(b);
     sum.print();
     cout<<"A*B :"<<endl;
-    */
     SparseMatrix<int>mul=a.multiply(b);
     mul.print();
-
+}
+void driver()
+{
+    
 }
 int main()
 {
-    driver();
+    test();
     return 0;
 }
