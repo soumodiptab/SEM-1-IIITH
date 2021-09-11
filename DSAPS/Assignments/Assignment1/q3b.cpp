@@ -231,8 +231,8 @@ void initializer(SparseMatrix<T> &a,T matrix[][4],int row,int col)
 }
 void test()
 {
-    int mat[][4]={{1,3,0,0},{0,0,2,0},{0,2,0,0},{0,0,0,0}};
-    int mat2[][4]={{3,0,0,0},{-1,0,0,9},{0,0,0,0},{0,1,0,0}};
+    int mat[][4]={{1,2,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};
+    int mat2[][4]={{2,0,0,0},{-1,0,0,0},{0,0,0,0},{0,0,0,0}};
     SparseMatrix<int>a(4,4);
     initializer(a,mat,4,4);
     SparseMatrix<int>b(4,4);

@@ -103,7 +103,7 @@ class LFU{
     }
     int get(int key)
     {
-        if(key_value.find(key)==key_value.end())
+        if(cap==0||key_value.find(key)==key_value.end())
         {
             return -1;
         }
@@ -117,7 +117,7 @@ class LFU{
     }
     void set(int key,int val)
     {
-        if(cap<=0)
+        if(cap==0)
             return;
         if(key_value.find(key)!=key_value.end())
         {

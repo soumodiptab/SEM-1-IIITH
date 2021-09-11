@@ -86,7 +86,7 @@ class LRU{
     }
     int get(int key)
     {
-        if(mp.find(key)==mp.end()) // if key not found
+        if(cap==0||mp.find(key)==mp.end()) // if key not found
         {
             return -1;
         }
@@ -100,7 +100,7 @@ class LRU{
     }
     void set(int key,int val)
     {
-        if(cap<=0)
+        if(cap==0)
             return;
         Node *new_node=new Node(key,val);
         if(mp.find(key)!=mp.end())//key is already present

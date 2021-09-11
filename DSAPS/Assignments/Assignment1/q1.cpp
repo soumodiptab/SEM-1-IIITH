@@ -6,7 +6,7 @@ template <typename T>
 class stack
 {
     int top;
-    int capacity=100;
+    int capacity=10;
     T *arr;
     public:
     stack()
@@ -47,25 +47,18 @@ class stack
 class BigInt{
     private:
     string val;
-    //This function adds two strings
-    int compare(string a,string b)
+    public:
+    static void remove_trailing_zeros(string &x)
     {
-        if(a.length()>b.length())
-            return 1;
-        else if(a.length()<b.length())
-            return -1;
-        else
-        {
-            if(a[0]>b[0])
-                return 1;
-            else if(a[0]<b[0])
-                return -1;
-            else
-                return 0;
-        }
+         while(x[0]=='0' && x.length()>1)
+            {
+                x.erase(0,1);
+            }
     }
     static string add(string a,string b)
     {
+        remove_trailing_zeros(a);
+        remove_trailing_zeros(b);
         int res_length=(a.length()>b.length())?a.length():b.length();
         string result(res_length,'0');
         int diff=std::abs((int)(a.length()-b.length()));
@@ -94,6 +87,8 @@ class BigInt{
     //Assuming a>b as specified in the question
     static string substract(string a,string b)
     {
+        remove_trailing_zeros(a);
+        remove_trailing_zeros(b);
         int res_length=a.length();
         string result(res_length,'0');
         int diff=std::abs((int)(a.length()-b.length()));
@@ -110,18 +105,16 @@ class BigInt{
             result[i]=(a[i]-'0')-(b[i]-'0')+'0';
         }
         int i=0;
-        //remove the zeros incase both no. have lots of same digits in the front
-        while(result[0]=='0' && result.length()>1)
-            {
-                result.erase(0,1);
-            }
+        remove_trailing_zeros(result);
         return result;
     }
     //a>b
     static string multiply(string a,string b)
     {
-        string result(1,'0');
-        if(a.compare("0")==0 || b.compare("0")==0)
+        remove_trailing_zeros(a);
+        remove_trailing_zeros(b);
+        string result="0";
+        if(compare(a,"0")==0 || compare(b,"0")==0)
             return result;
         for(int i=b.length()-1;i>=0;i--)
         {
@@ -147,37 +140,78 @@ class BigInt{
             prod.append((b.length()-i-1),'0');
             result=add(result,prod);
         }
-        //remove the zeros incase both no. have lots of same digits in the front
-        while(result[0]=='0' && result.length()>1)
-            {
-                result.erase(0,1);
-            }
+        remove_trailing_zeros(result);
         return result;
     }
-    string divide(string a,string b)
+    //a>b :1 a=b :0 a<b :-1
+    static int compare(string a,string b)
     {
-        
-    }
-    string gcd_runner(string a,string b)
-    {
-        if(b=="0")
-		    return a;
-	    string mod=divide(a,b);
-	    return gcd_runner(b,mod);	
-    }
-    string binary_expo(string x,unsigned long long n)
-    {
-        string result="1";
-        while(n>0)
+        if(a.length()>b.length())
+            return 1;
+        else if(a.length()<b.length())
+            return -1;
+        else
         {
-            if(n&1)
-                result=multiply(x,result);
-            x=multiply(x,x);
-            n>>=1;
+            for(int i=0;i<a.length();i++)
+            {
+                if(a[i]>b[i])
+                    return 1;
+                else if(a[i]<b[i])
+                    return -1;
+            }
         }
-        return result;
+        return 0;
     }
-    public:
+    //-----------------------------------------------------
+    static string mod(string dividend,string divisor)
+    {
+        remove_trailing_zeros(dividend);
+        remove_trailing_zeros(divisor);
+        if(compare(dividend,divisor)==-1)
+            return dividend;
+        if(compare(dividend,divisor)==0)
+            return "0";
+        int i,j;
+        j=divisor.length();
+        string temp,remaining,res;
+        res=dividend;
+        while(compare(res,divisor)>=0)
+        {
+            i=0;
+            temp=res.substr(0,j+i);
+            if(compare(temp,divisor)==-1)
+                i=1;
+            temp=res.substr(0,j+i);
+            remaining=res.substr(j+i,res.length()-j-i);
+            while(compare(temp,divisor)>=0)
+            {
+                temp=substract(temp,divisor);
+            }
+            //int rem_length=j-i;
+            res=remaining.insert(0,temp);
+            remove_trailing_zeros(res);
+            if(substract(res,"0")=="0")
+                return "0";
+            if(compare(res,divisor)==0)
+                return "0";
+        }
+        return res;
+    }
+    static string gcd_runner(string a,string b)
+    {
+        if(a=="0")
+		    return b;
+	    string m=mod(b,a);
+	    return gcd_runner(m,a);	
+    }
+    static string gcd(string a,string b)
+    {
+        remove_trailing_zeros(a);
+        remove_trailing_zeros(b);
+        string temp=gcd_runner(a,b);
+        return temp;
+    }
+    //--------------------------------------------------
     BigInt(string x)
     {
         this->val=x;
@@ -201,25 +235,35 @@ class BigInt{
         BigInt temp = BigInt(multiply(this->val,x.val));
         return temp;
     }
-    BigInt gcd(BigInt a,BigInt b)
+    //---------------------------------------------------------
+    static string binary_expo(string x,unsigned long long int n)
     {
-        BigInt temp = BigInt(gcd_runner(this->val,b.val));
-        return temp;
+        string result="1";
+        while(n>0)
+        {
+            if(n&1)
+                result=multiply(x,result);
+            x=multiply(x,x);
+            n>>=1;
+        }
+        return result;
     }
     BigInt power(unsigned long long b)
     {
         BigInt temp = BigInt(binary_expo(this->val,b));
         return temp;
     }
-    static string factorial(unsigned long long n)
+    //------------------------------------------------------------
+    static string factorial(unsigned long long int n)
     {
         string result="1";
-        for(unsigned long long i=2;i<=n;i++)
+        for(unsigned long long int i=2;i<=n;i++)
         {
             result=multiply(result,to_string(i));
         }
         return result;
     }
+    //-------------------------------------------------------------
     static int identify(char c)
     {//0-unknown 1-number 2-operator
         if(c>='0'&&c<='9')
@@ -290,6 +334,8 @@ class BigInt{
                     operands.pop();
                     char op=operators.peek();
                     operators.pop();
+                    remove_trailing_zeros(second);
+                    remove_trailing_zeros(first);
                     string result=apply(first,second,op);
                     operands.push(result);
                 }
@@ -304,6 +350,8 @@ class BigInt{
             operands.pop();
             char op=operators.peek();
             operators.pop();
+            remove_trailing_zeros(second);
+            remove_trailing_zeros(first);
             string result=apply(first,second,op);
             operands.push(result);
         }
@@ -315,9 +363,10 @@ void test_cases()
     BigInt a=BigInt("121023");
     BigInt b=BigInt("58098");
     auto start = chrono::high_resolution_clock::now();
-    BigInt c=a+b;
+    //BigInt c=a+b;
     auto stop = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
+    /*
     cout<<"Add: "<<c.value()<<endl;
     cout << duration.count() <<"ms"<< endl;
     //-----------------------------------------------------------------------------
@@ -345,6 +394,13 @@ void test_cases()
     duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
     cout << duration.count() <<"ms"<< endl;
     //-----------------------------------------------------------------------------
+    */
+    start = chrono::high_resolution_clock::now();
+    cout<<BigInt::gcd("42000000000000000000000000000000000000000000000035000000","700700")<<endl;
+    //cout<<BigInt::substract("0000","0")<<endl;
+    stop = chrono::high_resolution_clock::now();
+    duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
+    cout << duration.count() <<"ms"<< endl;
 }
 int main()
 {
