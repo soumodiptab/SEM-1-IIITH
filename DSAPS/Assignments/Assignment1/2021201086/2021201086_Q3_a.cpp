@@ -1,11 +1,10 @@
 #include<iostream>
-#define MAX 1000
 using namespace std;
 // Sparse Matrix Represented using row and col arrays
 template <typename T>
 class SparseMatrix{
     private:
-    int capacity=10;
+    int capacity=50;
     int size; 
     int rows,cols;
     int *row;
@@ -64,6 +63,8 @@ class SparseMatrix{
     {
         //applying the concept of fast-transpose using total and index arrays
         SparseMatrix<T>temp(cols,rows);
+        while(temp.capacity<size)
+            temp.enlarge();
         temp.size=size;
         int *total=new int[cols];
         int *index=new int[cols+1];
