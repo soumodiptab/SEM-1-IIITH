@@ -1,205 +1,196 @@
 #include<iostream>
 using namespace std;
+// Sparse Matrix Represented using row and col arrays
 template <typename T>
-class Node
-{
-    public:
-    int row;
-    int col;
-    T value;
-    Node *left;
-    Node *right;
-    Node(int row,int col,T value)
-    {
-        this->row=row;
-        this->col=col;
-        this->value=value;
-        left=NULL;
-        right=NULL;
-    }
-};
-template <typename T>
-class SparseMatrix
-{
-    int size;
+class SparseMatrix{
+    private:
+    int capacity=50;
+    int size; 
     int rows,cols;
-    Node<T>* front;
-    Node<T>* rear;
+    int *row;
+    int *col;
+    T *value;
+    void enlarge()
+    {
+        capacity*=2;
+        int *new_row=new int[capacity];
+        int *new_col=new int[capacity];
+        T *new_value=new T[capacity];
+        for (int i=0;i<size;i++)
+        {
+            new_row[i]=row[i];
+            new_col[i]=col[i];
+            new_value[i]=value[i];
+        }
+        delete [] row;
+        delete [] col;
+        delete [] value;
+        row=new_row;
+        col=new_col;
+        value=new_value;
+    }
     public:
+    //inserts a new triple into the matrix(auto operation)
+    int insert(int i,int j,T val)
+    {
+        if(size==capacity)
+            enlarge();
+        row[size]=i;
+        col[size]=j;
+        value[size]=val;
+        size++;
+        return 1;
+    }
+    //Inserts the triple at a particular index based on pos(manual operation)
+    void insertAt(int pos,int i,int j, T val)
+    {
+        row[pos]=i;
+        col[pos]=j;
+        value[pos]=val;
+    }
+    //Constructor for creating a Sparse Matrix of generic type
     SparseMatrix(int rows,int cols)
     {
         this->rows=rows;
         this->cols=cols;
-        front=NULL;
-        rear=NULL;
+        row=new int[capacity];
+        col=new int[capacity];
+        value=new T[capacity];
         size=0;
     }
-    void insert(Node<T>* new_node)
-    {//Insert ar rear
-        //No node present
-        if(front==NULL)
-        {
-            front=new_node;
-            rear=front;
-        }
-        else
-        {
-            rear->right=new_node;
-            new_node->left=rear;
-            rear=new_node;
-        }
-    }
-    void delete_node(Node<T>* target)
-    {//delete from : <front> <middle> <rear>
-        if(target->left == NULL)//i.e. front node
-        {
-            front=target->right;
-        }
-        if(target->right == NULL)//i.e. rear node
-        {
-            rear=target->left;
-        }
-        //for middle nodes
-        if(target->left != NULL)
-            target->left->right=target->right;
-        if(target->right != NULL)
-            target->right->left=target->left;
-        delete target;
-    }
-    void insert(int i, int j ,T value)
+    //returns the transposed Sparse Matrix
+    SparseMatrix<T> transpose()
     {
-        Node<T>* new_node= new Node<T>(i,j,value);
-        insert(new_node);
-        size++;
-    }
-    SparseMatrix<T> add(SparseMatrix b)
-    {
-        SparseMatrix<T> temp(rows,cols);
-        Node<T>* iter_a=front;
-        Node<T>* iter_b=b.front;
-        while(iter_a!=NULL && iter_b!=NULL)
+        //applying the concept of fast-transpose using total and index arrays
+        SparseMatrix<T>temp(cols,rows);
+        while(temp.capacity<size)
+            temp.enlarge();
+        temp.size=size;
+        int *total=new int[cols];
+        int *index=new int[cols+1];
+        for(int i=0;i<cols;i++)
+            total[i]=0;
+        for(int i=0;i<size;i++)
+            total[col[i]]++;
+        index[0]=0;
+        for(int i=1;i<=cols;i++)
+            index[i]=index[i-1]+total[i-1];
+        for(int i=0;i<size;i++)
         {
-            if(iter_a->row==iter_b->row && iter_a->col==iter_b->col)
-            {
-                T val=iter_a->value+iter_b->value;
-                if(val!=0)
-                {
-                    temp.insert(iter_a->row,iter_b->col,val);
-                }
-                iter_a=iter_a->right;
-                iter_b=iter_b->right;
-            }
-            else if(iter_a->row<iter_b->row || (iter_a->row==iter_b->row && iter_a->col<iter_b->col))
-            {
-                temp.insert(iter_a->row,iter_a->col,iter_a->value);
-                iter_a=iter_a->right;
-            }
-            else
-            {
-                temp.insert(iter_b->row,iter_b->col,iter_b->value);
-                iter_b=iter_b->right;
-            }
-        }
-        while(iter_a!=NULL)
-        {
-            temp.insert(iter_a->row,iter_a->col,iter_a->value);
-            iter_a=iter_a->right;
-        }
-        while(iter_b!=NULL)
-        {
-            temp.insert(iter_b->row,iter_b->col,iter_b->value);
-            iter_b=iter_b->right;
+            int pos=index[col[i]]++;
+            temp.insertAt(pos,col[i],row[i],value[i]);
         }
         return temp;
     }
-    void swap(Node<T>* a,Node<T>* b)
+    SparseMatrix<T> add(SparseMatrix<T> b)
     {
-        T temp_val=a->value;
-        int temp_row=a->row;
-        int temp_col=a->col;
-        a->value=b->value;
-        a->row=b->row;
-        a->col=b->col;
-        b->value=temp_val;
-        b->row=temp_row;
-        b->col=temp_col;
+        SparseMatrix<T> temp(rows,cols);
+        int iter_a=0,iter_b=0;
+        while(iter_a<size && iter_b<b.size)
+        {
+            if(row[iter_a]==b.row[iter_b] && col[iter_a]==b.col[iter_b])//same row,col value
+            {
+                T val=value[iter_a]+b.value[iter_b];
+                if(val != 0)//if absolute value zero no need to reinsert
+                    temp.insert(row[iter_a],col[iter_a],val);
+                    iter_a++;
+                    iter_b++;
+            }
+            else if(row[iter_a]<b.row[iter_b]||(row[iter_a]==b.row[iter_b]&&col[iter_a]<b.col[iter_b]))//Sparse A has lower row,col value
+            {
+                temp.insert(row[iter_a],col[iter_a],value[iter_a]);
+                iter_a++;
+            }
+            else//Sparse B has lower row,col value
+            {
+                temp.insert(b.row[iter_b],b.col[iter_b],b.value[iter_b]);
+                iter_b++;
+            }
+        }
+        //Inserting the remaining elements
+        while(iter_a<size)
+        {
+            temp.insert(row[iter_a],col[iter_a],value[iter_a]);
+            iter_a++;
+        }
+        while(iter_b<b.size)
+        {
+            temp.insert(b.row[iter_b],b.col[iter_b],b.value[iter_b]);
+            iter_b++;
+        }
+        return temp;
+    }
+    void swap(int i,int j)
+    {
+        T temp_val=value[i];
+        int temp_row=row[i];
+        int temp_col=col[i];
+        value[i]=value[j];
+        row[i]=row[j];
+        col[i]=col[j];
+        value[j]=temp_val;
+        row[j]=temp_row;
+        col[j]=temp_col;
     }
     void sort()
     {
-        Node<T>*iter1=front;
-        while(iter1!=NULL)
+        for(int i=0;i<size-1;i++)
         {
-            Node<T>*iter2=iter1->right;
-            while(iter2!=NULL)
+            for(int j=i+1;j<size;j++)
             {
-                if(iter2->row<iter1->row ||(iter2->row==iter1->row && iter2->col<iter1->col))
+                if(row[j]<row[i]||(row[i]==row[j]&&col[j]<col[i]))
                 {
-                    swap(iter1,iter2);
+                    swap(i,j);
                 }
-                iter2=iter2->right;
             }
-            iter1=iter1->right;
         }
-    }
-    SparseMatrix<T>transpose()
-    {
-        SparseMatrix<T>temp(cols,rows);
-        Node<T>*iter=front;
-        while(iter!=NULL)
-        {
-            temp.insert(iter->col,iter->row,iter->value);
-            iter=iter->right;
-        }
-        temp.sort();
-        return temp;
     }
     void combine()
     {
-
-        Node<T>*iter1=front;
-        while(iter1!=NULL)
+        //mark for deletion
+        for(int i=0;i<size-1;i++)
         {
-            Node<T>*iter2=iter1->right;
-            while(iter2!=NULL && (iter1->row==iter2->row && iter1->col==iter2->col))
+            for(int j=i+1;j<size;j++)
             {
-                Node<T>*del_node=iter2;
-                iter1->value=iter1->value+iter2->value;
-                iter2=iter2->right;
-                delete_node(del_node);
-                size--;
-            }
-            iter1=iter1->right;
-        }
-        iter1=front;
-        while(iter1!=NULL)
-        {
-            Node<T>*del_node=iter1;
-            iter1=iter1->right;
-            if(del_node->value==0)
-            {
-                delete_node(del_node);
-                size--;
-            }
-        }
-    }
-    SparseMatrix<T>multiply(SparseMatrix b)
-    {
-        SparseMatrix<T>bt=b.transpose();
-        SparseMatrix<T>temp(rows,b.cols);
-        Node<T>*itera=front;
-        while(itera!=NULL)
-        {
-            Node<T>*iterb=bt.front;
-            while(iterb!=NULL)
-            {
-                if(itera->col==iterb->col)
+                if(row[i]==row[j]&&col[i]==col[j])
                 {
-                    T val=itera->value*iterb->value;
-                    temp.insert(itera->row,iterb->row,val);
+                    row[j]=-1;
+                    col[j]=-1;
+                    value[i]=value[i]+value[j];
                 }
-                iterb=iterb->right;
             }
-            itera=itera->right;
+        }
+        int i=0,j=0;// j finds valid row,col,value
+        while(j<size)
+        {
+            while(j<size&&((row[j]==-1&&col[j]==-1)||value[j]==0))
+            {
+                j++;
+            }
+            if(j==size)
+                break;
+            row[i]=row[j];
+            col[i]=col[j];
+            value[i]=value[j];
+            i++;
+            j++;
+        }
+        size=i;
+    }
+    SparseMatrix<T> multiply(SparseMatrix<T> b)
+    {
+        SparseMatrix<T> bt=b.transpose();
+        SparseMatrix<T> temp(rows,bt.cols);
+        for(int itera=0;itera<size;itera++)
+        {
+            for(int iterb=0;iterb<bt.size;iterb++)
+            {
+                if(col[itera]==bt.col[iterb])
+                {
+                    T val=value[itera]*bt.value[iterb];
+                    temp.insert(row[itera],bt.row[iterb],val);
+                }
+            }
         }
         temp.sort();
         temp.combine();
@@ -207,16 +198,14 @@ class SparseMatrix
     }
     void print()
     {
-        Node<T>*temp=front;
         cout<<"--------------------------"<<endl;
         cout<<"dim: "<<rows<<"x"<<cols<<endl;
         cout<<"--------------------------"<<endl;
         cout << "r\tc\tv\n";
         cout<<"--------------------------"<<endl;
-        while(temp!=NULL)
+        for (int i = 0; i < size; i++)
         {
-            cout<<temp->row<<"\t"<<temp->col<<"\t"<<temp->value<<endl;
-            temp=temp->right;
+            cout<<row[i]<<"\t"<< col[i]<<"\t"<<value[i]<<endl;
         }
         cout<<"--------------------------"<<endl;
     }
@@ -272,24 +261,16 @@ void test()
     mul.print();
 }
 */
+
+
 void driver()
 {
     int row,col,choice;
     cin>>choice;
     switch(choice)
     {
-        case 1://Transpose
-        {   
-            cin>>row>>col;
-            SparseMatrix<int>a(row,col);
-            int **arr=create_matrix<int>(row,col);
-            initializer(a,arr,row,col);
-            SparseMatrix<int>at=a.transpose();
-            at.print();
-        }
-            break;
-        case 2://Add
-        {
+        case 1://add
+        {  
             cin>>row>>col;
             SparseMatrix<int>a(row,col);
             int **arr1=create_matrix<int>(row,col);
@@ -302,7 +283,7 @@ void driver()
             c.print();
         }
             break;
-        case 3 ://Multiply
+        case 2://multiply
         {
             cin>>row>>col;
             SparseMatrix<int>a(row,col);
@@ -314,6 +295,16 @@ void driver()
             initializer(b,arr2,row,col);
             SparseMatrix<int>c=a.multiply(b);
             c.print();
+        }
+            break;
+        case 3 ://transpose
+        {
+            cin>>row>>col;
+            SparseMatrix<int>a(row,col);
+            int **arr=create_matrix<int>(row,col);
+            initializer(a,arr,row,col);
+            SparseMatrix<int>at=a.transpose();
+            at.print();
         }
     }
 }

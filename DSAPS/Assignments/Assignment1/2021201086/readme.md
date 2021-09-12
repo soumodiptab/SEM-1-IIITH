@@ -25,13 +25,13 @@ Enter the choice :
 * 1 - `get(key)` request
 * 2 - `set(key,value)` request
 ## Question 3 : Sparse Matrix
-### PART A : Array Implementation
+### PART A : Linked List Implementation
 ##### Filename : 2021201086_Q3_a.cpp
 #### Operational Instructions :
 1. Enter Operation to be performed.
-* 1 - Transpose a matrix
-* 2 - Add two matrix
-* 3 - Multiply two matrix
+* 1 - Add two matrix
+* 2 - Multiply two matrix
+* 3 - Transpose a matrix
 
 (Enter __row__, then __column__ and then the __matrix__)
 > __Note__ : The default datatype is set `int`<br>
@@ -52,13 +52,13 @@ The output is in the form of row(`r`) column(`c`) and value(`v`) and `dim` is di
     3       2       4
     3       3       4
     --------------------------
-### PART B : Linked List Implementation
+### PART B : Array Implementation
 ##### Filename : 2021201086_Q3_b.cpp
 #### Operational Instructions :
 1. Enter Operation to be performed.
-* 1 - Transpose a matrix
-* 2 - Add two matrix
-* 3 - Multiply two matrix
+* 1 - Add two matrix
+* 2 - Multiply two matrix
+* 3 - Transpose a matrix
 
 (Enter __row__, then __column__ and then the __matrix__)
 > __Note__ : The default datatype is set `int`<br>
