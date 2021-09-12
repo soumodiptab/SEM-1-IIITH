@@ -356,7 +356,6 @@ void driver()
 }
 int main()
 {
-    //test_cases();
     driver();
     return 0;
 }

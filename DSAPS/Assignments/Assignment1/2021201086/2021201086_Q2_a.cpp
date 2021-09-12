@@ -176,7 +176,23 @@ void cachetest()
 
 void driver()
 {
-    
+    int capacity,requests,choice,key,value;
+    cin>>capacity>>requests;
+    LRU cache(capacity);
+    while(requests--)
+    {
+        cin>>choice;
+        switch(choice)
+        {
+            case 1://get
+            cin>>key;
+            cout<<cache.get(key)<<endl;
+            break;
+            case 2:
+            cin>>key>>value;
+            cache.set(key,value);
+        }
+    }
 }
 int main()
 {

@@ -5,7 +5,7 @@ using namespace std;
 template <typename T>
 class SparseMatrix{
     private:
-    int capacity=100;
+    int capacity=10;
     int size; 
     int rows,cols;
     int *row;
@@ -210,21 +210,41 @@ class SparseMatrix{
     }
 };
 template <typename T>
-void initializer(SparseMatrix<T> &a,T matrix[][4],int row,int col)
+void initializer(SparseMatrix<T> &a,T** matrix,int row,int col)
 {
     for(int i=0;i<row;i++)
         for(int j=0;j<col;j++)
             if(matrix[i][j])
                 a.insert(i,j,matrix[i][j]);
 }
+template <typename T>
+T** create_matrix(int row,int col)
+{
+    T temp;
+    T** arr=new T*[row];
+    for(int i=0;i<row;i++)
+    {
+        arr[i]=new T[col];
+    }
+    for(int i=0;i<row;i++)
+    {
+        for(int j=0;j<col;j++)
+        {
+            cin>>temp;
+            arr[i][j]=temp;
+        }
+    }
+    return arr;
+}
+/*
 void test()
 {
-    int mat[][4]={{1,2,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};
-    int mat2[][4]={{2,0,0,0},{-1,0,0,0},{0,0,0,0},{0,0,0,0}};
+    int mat[][4]={{1,3,0,0},{0,0,2,0},{0,2,0,0},{0,0,0,0}};
+    int mat2[][4]={{3,0,0,0},{-1,0,0,9},{0,0,0,0},{0,1,0,0}};
     SparseMatrix<int>a(4,4);
-    initializer(a,mat,4,4);
+    //initializer(a,mat,4,4);
     SparseMatrix<int>b(4,4);
-    initializer(b,mat2,4,4);
+    //initializer(b,mat2,4,4);
     cout<<"A :"<<endl;
     a.print();
     cout<<"A Transpose :"<<endl;
@@ -239,12 +259,57 @@ void test()
     SparseMatrix<int>mul=a.multiply(b);
     mul.print();
 }
+*/
+
+
 void driver()
 {
-
+    int row,col,choice;
+    cin>>choice;
+    switch(choice)
+    {
+        case 1://Transpose
+        {   
+            cin>>row>>col;
+            SparseMatrix<int>a(row,col);
+            int **arr=create_matrix<int>(row,col);
+            initializer(a,arr,row,col);
+            SparseMatrix<int>at=a.transpose();
+            at.print();
+        }
+            break;
+        case 2://Add
+        {
+            cin>>row>>col;
+            SparseMatrix<int>a(row,col);
+            int **arr1=create_matrix<int>(row,col);
+            initializer(a,arr1,row,col);
+            cin>>row>>col;
+            SparseMatrix<int>b(row,col);
+            int **arr2=create_matrix<int>(row,col);
+            initializer(b,arr2,row,col);
+            SparseMatrix<int>c=a.add(b);
+            c.print();
+        }
+            break;
+        case 3 ://Multiply
+        {
+            cin>>row>>col;
+            SparseMatrix<int>a(row,col);
+            int **arr1=create_matrix<int>(row,col);
+            initializer(a,arr1,row,col);
+            cin>>row>>col;
+            SparseMatrix<int>b(row,col);
+            int **arr2=create_matrix<int>(row,col);
+            initializer(b,arr2,row,col);
+            SparseMatrix<int>c=a.multiply(b);
+            c.print();
+        }
+    }
 }
 int main()
 {
     //test();
+    driver();
     return 0;
 }

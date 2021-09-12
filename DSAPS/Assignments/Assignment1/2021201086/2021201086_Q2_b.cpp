@@ -20,7 +20,7 @@ class hashed_list
     stuff to make :
     front and rear
     insert node at rear
-    erase function or delete any node
+    erase function or delete any node in O(1)
     */
     int sz=0;
     private:
@@ -170,8 +170,29 @@ void cachetest()
     cout<<cache.get(2)<<endl;
 
 }
+void driver()
+{
+    int capacity,requests,choice,key,value;
+    cin>>capacity>>requests;
+    LFU cache(capacity);
+    while(requests--)
+    {
+        cin>>choice;
+        switch(choice)
+        {
+            case 1://get
+            cin>>key;
+            cout<<cache.get(key)<<endl;
+            break;
+            case 2://set
+            cin>>key>>value;
+            cache.set(key,value);
+        }
+    }
+}
 int main()
 {
-    cachetest();
+    //cachetest();
+    driver();
     return 0;
 }
