@@ -1,25 +1,28 @@
 #!/bin/bash
-perm() {
-  local items="$1"
-  local out="$2"
-  local i
-  [[ "$items" == "" ]] && echo "$out" && return
-  for (( i=0; i<${#items}; i++ )) ; do
-    perm "${items:0:i}${items:i+1}" "$out${items:i:1}"
-  done
-  }
+function sort_char
+{
+  local var=$(echo "$1" | grep -o . | sort | tr -d "\n")
+  echo $var
+}
 flag=0
 out=()
-perm $1 > tmp
+input=$(echo $1|tr A-Z a-z)
+sorted=$(sort_char $input)
+compgen -c | sort -u >tmp
 while read p; do
-	x=$($p --help 2>/dev/null)
-	[[ ! -z $x ]] && flag=1 && out+=($p)
+	x=$(sort_char $p)
+  if [[ $x ==  $sorted ]]
+  then
+      out+=($p)
+      flag=1
+  fi
 done < tmp
 rm tmp
 if [ $flag == 0 ]
 then
 	echo "NO"
 else
-	printf "\nYES "
-	printf '%s\t' "${out[@]}"
+	printf "YES"
+	printf '\t%s' "${out[@]}"
+	printf "\n"
 fi
