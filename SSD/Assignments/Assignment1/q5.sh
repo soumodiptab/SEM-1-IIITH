@@ -19,6 +19,3 @@ do
 done
 #compress all the text files
 zip txt_compressed.zip *.txt
-cd ..
-#if file already exist then overwrite
-mv -f temp_activity/txt_compressed.zip txt_compressed.zip

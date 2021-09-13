@@ -23,7 +23,7 @@ function int_to_rom()
 }
 function rom_to_int()
 {
-	local number=$(
+	local num=$(
     echo $1 |
     sed 's/CM/DCD/g' |
     sed 's/M/DD/g' |
@@ -39,7 +39,7 @@ function rom_to_int()
     sed 's/V/IIIII/g' |
     tr -d '\n' |
     wc -m)
-	echo $number
+	echo $num
 }
 if [[ $# == 1 ]]
 then

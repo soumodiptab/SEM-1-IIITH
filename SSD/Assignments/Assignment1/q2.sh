@@ -1,3 +1,3 @@
 #!/bin/bash
 # $1 = input.txt $2 = output.txt
-grep -ohwi "\w*ing" $1 | tr A-Z a-z > $2
+grep -owi "\w*ing" $1 | tr A-Z a-z > $2
