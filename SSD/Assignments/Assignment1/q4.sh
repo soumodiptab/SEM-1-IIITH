@@ -41,7 +41,7 @@ function rom_to_int()
     wc -m)
 	echo $num
 }
-if [[ $# == 1 ]]
+if [[ $# == 1 && "${1//[IVXLCDM]/}" != "" ]]
 then
 	numeral=$(int_to_rom $1)
 	echo $numeral
