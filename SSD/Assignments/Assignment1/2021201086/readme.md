@@ -93,7 +93,7 @@ Then it removes a newline before doing a count using `tr` and `wc` commands.
 __Converts Integer to Roman__
 
 We run a loop for each Roman Numeral's decimal value from highest to lowest and check it that numeral value is able to divide the number and if it does then add that numeral to our output and extract the remainder and continue looping until number is zero.
-Strategy:
+#### Strategy:
 1. If number of arguments is 1 then convert integer to roman using `int_to_rom` function.
 2. For 2 arguments check if both are roman numbers using search and replace i.e. if the roman number contains I,V,X,L,C,D,M then it becomes empty string and then use function `rom_to_int` to convert to corresponding integer and then perform the sum operation.
 3. Similarly if both are integers then first add them up and then use `int_to_rom` function to convert to roman numeral.
