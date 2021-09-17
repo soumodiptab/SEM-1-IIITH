@@ -31,8 +31,8 @@ dummy5  4.1K
 ## Question 2
 ### File name : q2.sh
 #### Strategy :
-1. Using the `grep` command to find words ending with "ing" and using the options `w` for word `o` for displaying only matched words and `i` for ignoring case
-2. Translating the output to lower case using `tr`
+1. Using the `grep` command to find words ending with "ing" and using the options `w` for word `o` for displaying only matched words and `i` for ignoring case.
+2. Translating the output to lower case using `tr`.
 #### Assumptions :
 1. In output.txt all words are printed in lower-case
 #### I/O Format :

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style type="text/css">
+        body
+        {
+            margin: 30px;
+            text-align: center;
+        }
+        form
+        {
+            background-color:rgb(195, 230, 230);
+            margin: auto;
+            padding: 10px 10px 10px 10px;
+            border-radius: 2px 2px 2px 2px;
+            border-style: solid;
+
+        }
+    </style> 
+</head>
+<body>
+    <form>
+        <input type="text" id="number1">
+        <br>
+        <input type="text" id=number2>
+        <br>
+        <input type="text" id="texts">
+        <br>
+        <input type="button" value="X" onclick="multiply()">
+        <input type="button" value="/" onclick="divide()">
+        <input type="button" value="fun" onclick="fun()">
+    </form>
+    <p>
+        The result is:
+        <span id="result"></span>
+    </p>
+    <script>
+        function multiply()
+        {
+            let num1=document.getElementById("number1").value;
+            let num2=document.getElementById("number2").value;
+            let res=num1*num2;
+            document.getElementById("result").innerHTML=res;
+        }
+        function divide()
+        {
+            let num1=document.getElementById("number1").value;
+            let num2=document.getElementById("number2").value;
+            document.getElementById("result").innerHTML=num1/num2; 
+        }
+        function fun()
+        {
+            var newNode=document.createElement("p");
+            newNode.innerHTML=document.getElementById("texts").value;
+            document.body.appendChild(newNode);
+        }
+    </script>
+</body>
+</html>
