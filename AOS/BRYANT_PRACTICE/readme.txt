@@ -1,0 +1,1 @@
+strace -e trace=write ./objectfile

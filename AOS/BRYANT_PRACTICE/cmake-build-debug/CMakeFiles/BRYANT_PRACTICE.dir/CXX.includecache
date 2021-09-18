@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/soumodiptab/Courses/SEM-1/AOS/BRYANT_PRACTICE/prac1.cpp
+iostream
+/home/soumodiptab/Courses/SEM-1/AOS/BRYANT_PRACTICE/iostream
+sys/types.h
+-
+sys/stat.h
+-
+fcntl.h
+-
+unistd.h
+-
+

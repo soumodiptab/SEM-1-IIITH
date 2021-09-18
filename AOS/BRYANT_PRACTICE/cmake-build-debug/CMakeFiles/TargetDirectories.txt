@@ -1,0 +1,3 @@
+/home/soumodiptab/Courses/SEM-1/AOS/BRYANT_PRACTICE/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/soumodiptab/Courses/SEM-1/AOS/BRYANT_PRACTICE/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/soumodiptab/Courses/SEM-1/AOS/BRYANT_PRACTICE/cmake-build-debug/CMakeFiles/BRYANT_PRACTICE.dir

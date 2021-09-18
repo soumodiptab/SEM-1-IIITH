@@ -1,4 +1,4 @@
-# Lab Activity 4
+# SSD Lab Activity 4
 ```
 ├── index.html
 ├── readme.md

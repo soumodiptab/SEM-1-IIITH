@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/BRYANT_PRACTICE.dir/prac1.cpp.o -o BRYANT_PRACTICE 
