@@ -31,6 +31,6 @@ void listFiles(const char* dirname) {
 }
 
 int main(int argc, char* argv[]) {
-    listFiles("hello");
+    listFiles(".");
     return 0;
 }

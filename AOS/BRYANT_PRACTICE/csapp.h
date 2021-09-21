@@ -7,3 +7,8 @@
 #include<dirent.h>
 #include<string.h>
 using namespace std;
+/**
+ * @brief its a global variable
+ * 
+ */
+int glabal=10;
