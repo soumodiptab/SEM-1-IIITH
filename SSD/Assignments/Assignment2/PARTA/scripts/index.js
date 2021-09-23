@@ -1,3 +1,11 @@
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
 function contentclear()
 {
     var i, content;
@@ -16,5 +24,15 @@ function openContent(e, name) {
     document.getElementById(name).style.display = "block";
     e.currentTarget.className += " active";
   }
+function datesetter()
+{
+  var x=document.getElementById("date");
+  x.innerHTML=new Date();
+  display_c();
+}
+function display_c(){
+  mytime=setTimeout('datesetter()',1000)
+  }
 contentclear();
 document.getElementById("home").style.display = "block";
+datesetter();

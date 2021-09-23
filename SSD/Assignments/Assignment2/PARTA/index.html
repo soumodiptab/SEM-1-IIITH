@@ -7,39 +7,44 @@
     <title>Soumodipta Bose</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Grechen+Fuemen&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Grechen+Fuemen|Montserrat" rel="stylesheet">
     <link rel="stylesheet" href="styles/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
+    <link href="https://fonts.googleapis.com/css2?family=Grechen+Fuemen&family=Montserrat&display=swap" rel="stylesheet">
+  </head>
 <body>
-        <div class="sidebar">
+        <div class="topnav" id="myTopnav">
             <a class="tabs active" onclick="openContent(event, 'home')">Home</a>
             <a class="tabs" onclick="openContent(event, 'edu')">Education</a>
             <a class="tabs" onclick="openContent(event, 'skills')">Skills</a>
             <a class="tabs" onclick="openContent(event, 'proj')">Projects</a>
             <a class="tabs" onclick="openContent(event, 'con')">Contact</a>
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+              <i class="fa fa-bars"></i>
+            </a>
         </div>
       
       <div id="home" class="content">
         <h1>Soumodipta Bose</h1>
         <img id="profile" src="https://media-exp1.licdn.com/dms/image/C5103AQHtMWEtpSPZtg/profile-displayphoto-shrink_200_200/0/1570958794544?e=1637798400&v=beta&t=UkYrjlvcB5Mj36vrSKVayu9mbfq3EeyFili8uzt7ibo" alt="profile-image">
-        <div class="paracon">
-            Hey there!
-        </div>
+        <div class="paracon"><p>Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+           Animi quos vero pariatur impedit ad quis nostrum incidunt. 
+           Inventore ea impedit explicabo non, in vel voluptatem, optio exercitationem eveniet velit deserunt!</p></div>
       </div>
       
       <div id="edu" class="content">
         <div class="educon">
-            <h2>University of Engineering and Management, Kolkata</h2>
+            <h2>Undergraduation</h2>
+            <h3>University of Engineering and Management, Kolkata</h3>
             <h4>2015-2019</h4>
-            <div class="eduimgcon"><img class="eduimg"  src="https://uem.edu.in/app/themes/iem-group-wp-theme/resources/logo.png" alt="uem-image">
+            <div class="eduimgcon"><img class="imgc"  src="https://uem.edu.in/app/themes/iem-group-wp-theme/resources/logo.png" alt="uem-image">
             </div>
             <a href="https://uem.edu.in/uem-kolkata/">Visit</a>
         </div>
         <div class="educon">
-            <h2>IIIT Hyderabad</h2>
+            <h2>Post-graduation</h2>
+            <h3>IIIT Hyderabad</h3>
             <h4>2021-2023</h4>
-            <div class="eduimgcon"><img class="eduimg"  src="https://www.iiit.ac.in/img/iiit-new.png" alt="iiit-image">
+            <div class="eduimgcon"><img class="imgc"  src="https://www.iiit.ac.in/img/iiit-new.png" alt="iiit-image">
             </div>
             <a href="https://www.iiit.ac.in/">Visit</a>
         </div>
@@ -48,30 +53,78 @@
         <h3>SKILLS</h3>
         <table>
             <tr>
-                <td>C</td>
-                <td>C++</td>
-                <td>Java</td>
+                <td><img class="imgc" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/C_Programming_Language.svg/1200px-C_Programming_Language.svg.png" alt="c"></td>
+                <td><img class="imgc" src="https://upload.wikimedia.org/wikipedia/commons/1/18/ISO_C%2B%2B_Logo.svg" alt="cpp"></td>
+                <td><img class="imgc" src="https://play-lh.googleusercontent.com/MK12c7vLGVgCgTUvuhlb9b69BwO0-UqsLkvzrHef46xT1ilYoMknDa-Nq0HZwFDX8ts" alt="java"></td>
             </tr>
             <tr>
-                <td>HTML</td>
-                <td>CSS</td>
-                <td>JS</td>
+                <td><img class="imgc" src="data:image/png;base64,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" alt="html"></td>
+                <td><img class="imgc" src="https://upload.wikimedia.org/wikipedia/commons/d/d5/CSS3_logo_and_wordmark.svg" alt="CSS"></td>
+                <td><img class="imgc" src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" alt="JS"></td>
             </tr>
             <tr>
-                <td>Spring</td>
-                <td>Maven</td>
-                <td>SQL</td>
+                <td colspan="2"><img class="imgc" src="https://spring.io/images/OG-Spring.png" alt="spring"></td>
+                <td><img class="imgc" src="https://thumbs.dreamstime.com/b/sql-database-icon-logo-design-ui-ux-app-orange-inscription-shadow-96841969.jpg" alt="sql"></td>
             </tr>
+            <tr>
+              <td><img class="imgc" src="https://comunytek.com/wp-content/uploads/2017/03/Microservices.png" alt="microservices"></td>
+              <td colspan="2"><img class="imgc" src="data:image/png;base64,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" alt="activemq"></td>
+          </tr>
         </table>
+        <a href="https://drive.google.com/file/d/1LqH3ZGwj9vb7SE0XGpVE1eLWBjU7Hryc/view">RESUME</a>
       </div>
+      
       <div id="proj" class="content">
-        <h3>df</h3>
-        <p>Tokyo is the capital of Japan.</p>
+        <h2>Projects</h2>
+        <h3>Matching Post Disaster Resource Needs in Code-Mixed Microblogs</h3>
+        <p>Exploratory and Analytical Study of data generated in social media
+           feeds during disasters and match resource requirements
+          and needs.</p>
+        <h2>Experience</h2>
+        <div>
+          <p>I have worked in ISTAR/GV an application that is meant for Brokers for
+trading stocks in various international markets and gained practical
+knowledge in the following areas:</p>
+<ul>
+<li> Development : Worked on both new development as well as
+changes requested by client like:
+Batch Service that runs at a scheduled time and extracts data
+pertaining to the Transfer of Accounts between various brokers
+and convertsit into a report(PDF/XLS/CSV) and sendsto the origin broker using email service.
+Creating a new flow of Message Processing that allows partial
+allocation of trades from Processing Queues and UI changes to
+convert excel file records into messages which are then sent to
+these Processing queues.
+Creating a Batch that allows more flexible ETO Trading by auto‐
+mating the procedure done using various screens. (etc.)
+</li>
+<li> Patches and Fixes : Fixed various Bugs and Issues faced by the
+users in UI as well as backend processing like: Allowing users to
+upload XLSX instead of XLS files and allow more than 80000 records per file using a new class, Tweaking brokerage calculation
+formulae to allow more flexibility using rule based tax fee. (etc.)
+</li>
+<li> Debugging: Tracing and finding root causes of various errors in
+Production Server.
+</li>
+<li> Upgradation : Worked in Database Upgradation from older ver‐
+sion of Oracle 11g to 19c newer version and reworked the pro‐
+ject build in MAVEN and made custom changes to various third
+party APIs to allow compatibility with the newer database.
+</li>
+<li>Dev Ops : Managing updates and builds for Dev, QA, and Pro‐
+duction Environments and release of new versions of the ap‐
+plication.
+</li>
+</ul>
+        </div>
       </div>
       <div id="con" class="content">
-        <h3>dfg</h3>
-        <p>Tokyo is the capital of Japan.</p>
+        <h3>Contact Form</h3>
+        <p>Please type</p>
       </div>
+      <footer>
+          <div id="date">date</div>
+      </footer>
 <script src="scripts/index.js"></script>
 </body>
 </html>
