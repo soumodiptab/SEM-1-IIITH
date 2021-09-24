@@ -1,4 +1,4 @@
-function myFunction() {
+function navfunction() {
   var x = document.getElementById("myTopnav");
   if (x.className === "topnav") {
     x.className += " responsive";
@@ -28,9 +28,9 @@ function datesetter()
 {
   var x=document.getElementById("date");
   x.innerHTML=new Date();
-  display_c();
+  displayloop();
 }
-function display_c(){
+function displayloop(){
   mytime=setTimeout('datesetter()',1000)
   }
 contentclear();
