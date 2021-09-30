@@ -215,6 +215,8 @@ void testcases()
     q.display();
     q.resize(6,1);
     q.display();
+    deque<string>q1(10,"hello");
+    q1.display();
 }
 int main()
 {
