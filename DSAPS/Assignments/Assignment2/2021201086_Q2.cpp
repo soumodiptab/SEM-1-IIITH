@@ -125,23 +125,49 @@ void testcases()
 void problem()
 {
     unordered_map<int,int>mp;
-    int n,k,dist=0;
+    int n,k,count=0;
     cin>>n>>k;
     int arr[n];
     for(int i=0;i<n;i++)
     {
         cin>>arr[i];
     }
+    //initial window
     for(int i=0;i<k;i++)
     {
         if(!mp.find(arr[i]))
+        {
             mp.insert(arr[i],1);
+            count++;
+        }
         else
             mp[arr[i]]+=1;
+    }
+    cout<<count;
+    for(int i=k;i<n;i++)
+    {
+        if(mp[arr[i-k]]==1)
+        {
+            count--;
+            mp.erase(arr[i-k]);
+        }
+        else
+            mp[arr[i-k]]-=1;
+        if(!mp.find(arr[i]))
+        {
+            count++;
+            mp.insert(arr[i],1);
+        }
+        else
+        {
+            mp[arr[i]]+=1;
+        }
+        cout<<" "<<count;
     }
 }
 int main()
 {
-    testcases();
+    //testcases();
+    problem();
     return 0;
 }

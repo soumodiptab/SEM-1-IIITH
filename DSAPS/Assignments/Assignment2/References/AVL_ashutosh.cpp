@@ -19,7 +19,8 @@ struct cmpare{
         return a.name<b.name;
     }
 };
-template <typename T , class Comparator = Less<T>> class AVL
+template <typename T , class Comparator = Less<T>> 
+class AVL
 {
     public:
         class node{
