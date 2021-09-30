@@ -8,10 +8,6 @@ class deque
     int t_size,capacity;
     int p_front,rear;
     //-----------------------------------------------------------------
-    /**
-     * @brief initializes the queue and allocates mem
-     * 
-     */
     void init()
     {
         p_front=-1;
@@ -27,7 +23,7 @@ class deque
         pos=capacity/4;
         for(int j=pos;j<pos+t_size;j++)
         {
-            temp[j]=data[j];
+            temp[j]=data[i];
             i=(i+1)%(capacity/2);
         }
         p_front=pos;
@@ -118,7 +114,7 @@ class deque
         data[p_front]=val;
         t_size++;
     }
-    void pop_front(T val)
+    void pop_front()
     {
         if(t_size==0)
             return;
@@ -138,14 +134,14 @@ class deque
     }
     T front()
     {
-        if(size==0)
+        if(t_size==0)
             return NULL;
         return data[p_front];
     }
     T back()
     {
-        if(size==0)
-            return NULL:
+        if(t_size==0)
+            return NULL;
         return data[rear];
     }
     bool empty()
@@ -158,18 +154,32 @@ class deque
     }
     void resize(int new_size,T default_val)
     {
-        if(new_size<size)
-            return;
         if(new_size>capacity)
         {
             enlarge();
+        }
+        if(new_size>t_size)
+        {
+            int diff=new_size-t_size;
+            while(diff--)
+            {
+                push_back(default_val);
+            }
+        }
+        else if(new_size<t_size)
+        {
+            int diff=t_size-new_size;
+            while(diff--)
+            {
+                pop_back();
+            }
         }
     }
     void clear()
     {
         clear_flag=true;
-        delete [] data;
-        size=0;
+        t_size=0;
+        p_front=rear=-1;
     }
     T operator [](int index)
     {
@@ -180,16 +190,30 @@ class deque
     }
     void display()
     {
-        for(int i=p_front;i<rear;i++)
+        int pos=p_front;
+        for(int i=0;i<t_size;i++)
         {
-            cout<<data[i]<<" ";
+            cout<<data[pos]<<" ";
+            pos=(pos+1)%capacity;
         }
         cout<<endl;
     }
 };
 void testcases()
 {
-    deque<int>q(20,10);
+    deque<int>q(2,10);
+    q.display();
+    q.push_front(12);
+    q.display();
+    q.push_front(21);
+    q.display();
+    q.push_back(23);
+    q.display();
+    q.resize(10,5);
+    q.display();
+    q.push_back(13);
+    q.display();
+    q.resize(6,1);
     q.display();
 }
 int main()
