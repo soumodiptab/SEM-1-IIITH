@@ -97,6 +97,10 @@ class unordered_map
         Node* temp=find_node(key);
         return temp->value;
     }
+    /**
+     * @brief Use this to check the location of hashed keys
+     * 
+     */
     void debug()
     {
         for(int i=1;i<40;i++)
