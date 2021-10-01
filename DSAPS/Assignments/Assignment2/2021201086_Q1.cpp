@@ -17,12 +17,15 @@ class avl
         T data;
         int height;
         int count;
+        int left_count,right_count;
         Node *left,*right;
         Node(T key)
         {
             data=key;
             count=1;
             height=1;
+            left_count=0;
+            right_count=0;
             left=NULL;
             right=NULL;
         }
@@ -122,6 +125,8 @@ class avl
         pivot->left=head;
         head->height=1+max_height(head);
         pivot->height=1+max_height(pivot);
+        head->right_count=pivot->left_count;
+        pivot->left_count=head->left_count+head->count+head->right_count;
         return pivot;
     }
     Node* right_rotation(Node* head)
@@ -131,6 +136,8 @@ class avl
         pivot->right=head;
         head->height=1+max_height(head);
         pivot->height=1+max_height(pivot);
+        head->left_count=pivot->right_count;
+        pivot->right_count=head->left_count+head->count+head->right_count;
         return pivot;   
     }
     Node* fix_nodes(Node* head,int bf)
@@ -174,12 +181,14 @@ class avl
         //comparator --<change later>
         if(key < head->data)
         {
-            head->left=insert(head->left,head,key);
+            head->left=insert(head->left,key);
+            head->left_count++;
         }
         //go to right sub tree  comparator--<change later>
         else if(key > head->data)
         {
-            head->right=insert(head->right,head,key);
+            head->right=insert(head->right,key);
+            head->right_count++;
         }
         //duplicate key so increase count
         else
@@ -254,10 +263,12 @@ class avl
         if(key < head->data)
         {
             head->left=del(head->left,key);
+            head->left_count--;
         }
         else if( key > head->data)
         {
             head->right=del(head->right,key);
+            head->right_count--;
         }
         else//key found
         {
@@ -270,6 +281,7 @@ class avl
             {
                 Node* new_target=inorder_predecessor(head->left);
                 transfer(head,new_target);
+                head->left_count=new_target->count;
                 head->left=del(head->left,head->data);
             }
             else
@@ -319,6 +331,22 @@ class avl
         else
         {
             lower(head->left,key,cache);
+        }
+    }
+    T kth(Node *head,int k)
+    {
+        if(head->right_count >= k)
+        {
+            return kth(head->right,k);
+        }
+        else if(head->count + head->right_count >= k)
+        {
+            return head->data;
+        }
+        else
+        {
+            int new_k=k-head->count-head->right_count;
+            return kth(head->left,new_k);
         }
     }
     /*-----------------------------------------------------------------------*/
@@ -375,13 +403,13 @@ class avl
     {
 
     }
-    T kth_largest(T key)
+    T kth_largest(int k)
     {
-
+        return kth(root,k);
     }
     T count_range(T lower,T upper)
     {
-
+        
     }
     void debug()
     {
@@ -432,6 +460,7 @@ void testcases()
     tree.delete_key(29);
     tree.display();
     cout<<"-------------------------------------------"<<endl;
+    cout<<tree.kth_largest(7)<<endl;
     //cout<<tree.count_key(49)<<endl;
     
 }
