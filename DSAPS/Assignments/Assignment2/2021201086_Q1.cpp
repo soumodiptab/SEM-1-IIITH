@@ -8,7 +8,7 @@ class Employee
     string name;
     string emp_id;
 };
-template<typename T>
+template<class T>
 class avl
 {
     class Node
@@ -102,8 +102,16 @@ class avl
     }
 
     /*-------------------------------------------------------------------*/
-    int max_height(Node *left_p, Node *right_p)
+    int get_height(Node *target)
     {
+        if(target!=NULL)
+            return target->height;
+        return 0;
+    }
+    int max_height(Node *head)
+    {
+        Node* left_p=head->left;
+        Node* right_p=head->right;
         int l=0,r=0;
         if(left_p)
             l=left_p->height;
@@ -122,11 +130,21 @@ class avl
     }
     Node* left_rotation(Node* head)
     {
-
+        Node* pivot=head->right;
+        head->right=pivot->left;
+        pivot->left=head;
+        pivot->height=1+max_height(pivot);
+        head->height=1+max_height(head);
+        return pivot;
     }
     Node* right_rotation(Node* head)
     {
-
+        Node *pivot=head->left;
+        head->left=pivot->right;
+        pivot->right=head;
+        pivot->height=1+max_height(pivot);
+        head->height=1+max_height(head);
+        return pivot;   
     }
     Node* insert(Node* head, T key)
     {
@@ -153,28 +171,29 @@ class avl
             return head;
         }
         //update the height
-        head->height=1+max_height(head->left,head->right);
+        head->height=1+max_height(head);
         int bf=balance_factor(head);
         //Now identify the location of the imbalance
         //left side imbalance
-        if(b>1)
+        if(bf>1)
         {
             //LL
-            if()
+            if(get_height(head->left->left)>=get_height(head->left->right))
             {
                 return right_rotation(head);
             }
             else if(key > head->data)
             {
-                Node * temp=left_rotation()
+                Node * temp=left_rotation();
             }
         }
-        else if(bf>1)
+        else if(bf<-1)
         {
-            if(key)
+            if(get_height(head->right->right)>=get_height(head->right->left))
+            {
+
+            }
         }
-        //RR
-        //RL
     }
     /*-------------------------------------------------------------------*/
     void insert_key(T key)
