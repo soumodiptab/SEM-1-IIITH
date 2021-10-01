@@ -273,7 +273,6 @@ class avl{
                 node->rc--;
                 node->right = deleteNode(node->right, key);
             }
-
             else{
 
                 if(node->count > 1){

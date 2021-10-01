@@ -1,6 +1,6 @@
 #include<iostream>
 using namespace std;
-
+const string ERROR="ERROR";
 
 class Employee
 {
@@ -17,7 +17,7 @@ class avl
         T data;
         int height;
         int count;
-        Node *left,*right,*parent;
+        Node *left,*right;
         Node(T key)
         {
             data=key;
@@ -25,16 +25,11 @@ class avl
             height=1;
             left=NULL;
             right=NULL;
-            parent=NULL;
         }
     };
     Node *root;
     /*----------Utility apis which is used in other functions------------*/
     public:
-    Node* find(T key)
-    {
-
-    }
     /*--------------------------------------------------------------------*/
     struct Trunk
     {
@@ -67,7 +62,7 @@ class avl
     printTree(root->right, trunk, true);
  
     if (!prev) {
-        trunk->str = "———";
+        trunk->str = "————";
     }
     else if (isLeft)
     {
@@ -75,13 +70,12 @@ class avl
         prev_str = "   |";
     }
     else {
-        trunk->str = "`———";
+        trunk->str = "`————";
         prev->str = prev_str;
     }
  
     showTrunks(trunk);
-    cout << root->data <<","<<root->count<< endl;
- 
+    cout<<root->data <<","<<root->count<<","<<root->height<< endl;
     if (prev) {
         prev->str = prev_str;
     }
@@ -91,13 +85,6 @@ class avl
     }
     void display()
     {
-        Node *root=new Node(2);
-        Node *l=new Node(1);
-        Node *r=new Node(3);
-        Node *r2=new Node(4);
-        root->left=l;
-        root->right=r;
-        root->left->right=r2;
         printTree(root, NULL, false);
     }
 
@@ -133,8 +120,8 @@ class avl
         Node* pivot=head->right;
         head->right=pivot->left;
         pivot->left=head;
-        pivot->height=1+max_height(pivot);
         head->height=1+max_height(head);
+        pivot->height=1+max_height(pivot);
         return pivot;
     }
     Node* right_rotation(Node* head)
@@ -142,11 +129,41 @@ class avl
         Node *pivot=head->left;
         head->left=pivot->right;
         pivot->right=head;
-        pivot->height=1+max_height(pivot);
         head->height=1+max_height(head);
+        pivot->height=1+max_height(pivot);
         return pivot;   
     }
-    Node* insert(Node* head, T key)
+    Node* fix_nodes(Node* head,int bf)
+    {
+        if(bf>1)
+        {
+            //LL
+            if(get_height(head->left->left)>=get_height(head->left->right))
+            {
+                return right_rotation(head);
+            }
+            //LR
+            else
+            {
+                Node* temp=left_rotation(head->left);
+                return right_rotation(head);
+            }
+        }
+        else
+        {
+            //RR
+            if(get_height(head->right->right)>=get_height(head->right->left))
+            {
+                return left_rotation(head);
+            }
+            else
+            {
+                Node* temp=right_rotation(head->right);
+                return left_rotation(head);
+            }
+        }
+    }
+    Node* insert(Node* head,T key)
     {
         //vacant position
         if(head==NULL)
@@ -157,12 +174,12 @@ class avl
         //comparator --<change later>
         if(key < head->data)
         {
-            head->left=insert(head->left,key);
+            head->left=insert(head->left,head,key);
         }
         //go to right sub tree  comparator--<change later>
         else if(key > head->data)
         {
-            head->right=insert(head->right,key);
+            head->right=insert(head->right,head,key);
         }
         //duplicate key so increase count
         else
@@ -175,63 +192,248 @@ class avl
         int bf=balance_factor(head);
         //Now identify the location of the imbalance
         //left side imbalance
-        if(bf>1)
+        if(abs(bf)>1)
         {
-            //LL
-            if(get_height(head->left->left)>=get_height(head->left->right))
-            {
-                return right_rotation(head);
-            }
-            else if(key > head->data)
-            {
-                Node * temp=left_rotation();
-            }
+            return fix_nodes(head,bf);
         }
-        else if(bf<-1)
+        return head;
+    }
+    Node* search(Node* head,T key)
+    {
+        if(head==NULL)
+            return head;
+        else if(head->data==key)
         {
-            if(get_height(head->right->right)>=get_height(head->right->left))
-            {
-
-            }
+            return head;
         }
+        else if(key<head->data)
+            return search(head->left,key);
+        else
+            return search(head->right,key);
     }
     /*-------------------------------------------------------------------*/
+    bool has_two_children(Node *head)
+    {
+        if(head->left && head->right)
+            return true;
+        else
+            return false;
+    }
+    bool is_leaf(Node *head)
+    {
+        if(head->left==NULL && head->right==NULL)
+            return true;
+        else
+            return false;
+    }
+    Node* get_node(Node *head)
+    {
+        if(head->left)
+            return head->left;
+        else if(head->right)
+            return head->right;
+        else
+            return NULL;
+    }
+    //x=y
+    void transfer(Node* x,Node *y)
+    {
+        x->data=y->data;
+        x->count=y->count;
+    }
+    Node* inorder_predecessor(Node *head)
+    {
+        if(head->right==NULL)
+            return head;
+        return inorder_predecessor(head->right);
+    }
+    Node* del(Node* head,T key)
+    {
+        if(head==NULL)
+            return head;
+        if(key < head->data)
+        {
+            head->left=del(head->left,key);
+        }
+        else if( key > head->data)
+        {
+            head->right=del(head->right,key);
+        }
+        else//key found
+        {
+            if(head->count>1)
+            {
+                head->count=head->count-1;
+                return head;
+            }
+            if(has_two_children(head))
+            {
+                Node* new_target=inorder_predecessor(head->left);
+                transfer(head,new_target);
+                head->left=del(head->left,head->data);
+            }
+            else
+            {
+                Node* mark_for_deletion=head;
+                head=get_node(head);
+                delete(mark_for_deletion);
+            }
+        }
+        if(head==NULL)
+            return head;
+        //update the height
+        head->height=1+max_height(head);
+        int bf=balance_factor(head);
+        //Now identify the location of the imbalance
+        //left side imbalance
+        if(abs(bf)>1)
+        {
+            return fix_nodes(head,bf);
+        }
+        return head;
+    }
+
+    void upper(Node* head, T key,T& cache)
+    {
+        if(head==NULL)
+            return;
+        if(key < head->data)
+        {
+            cache=head->data;
+            upper(head->left,key,cache);
+        }
+        else
+        {
+            upper(head->right,key,cache);
+        }
+    }
+    void lower(Node* head, T key,T& cache)
+    {
+        if(head==NULL)
+            return;
+        if(key > head->data)
+        {
+            cache=head->data;
+            lower(head->right,key,cache);
+        }
+        else
+        {
+            lower(head->left,key,cache);
+        }
+    }
+    /*-----------------------------------------------------------------------*/
     void insert_key(T key)
     {
-
+        root=insert(root,key);
     }
     void delete_key(T key)
     {
-
+        Node* temp=search(root,key);
+        if(temp==NULL)
+        {
+            return;
+        }
+        else
+        {
+            root=del(root,key);
+        }
     }
-    void search_key(T key)
-    {
 
+
+    bool search_key(T key)
+    {
+        Node* temp=search(root,key);
+        return (temp==NULL)?false:true;
     }
     int count_key(T key)
     {
-
+        Node* temp=search(root,key);
+        if(temp==NULL)
+            return -1;
+        else
+            return temp->count;
     }
     T lower_bound(T key)
     {
-
+        T lower_bound_value=NULL;
+        lower(root,key,lower_bound_value);
+        if(lower_bound_value!=NULL)
+            cout<<lower_bound_value;
+        else
+            cout<<ERROR;
     }
-    T upper_bound(T key)
+    void upper_bound(T key)
+    {
+        T upper_bound_value=NULL;
+        upper(root,key,upper_bound_value);
+        if(upper_bound_value!=NULL)
+            cout<<upper_bound_value;
+        else
+            cout<<ERROR;
+    }
+    T closest(T key)
     {
 
     }
+    T kth_largest(T key)
+    {
 
+    }
+    T count_range(T lower,T upper)
+    {
+
+    }
+    void debug()
+    {
+        Node *root=new Node(2);
+        Node *l=new Node(1);
+        Node *r=new Node(3);
+        Node *r2=new Node(4);
+        root->left=l;
+        root->right=r;
+        root->left->right=r2;
+    }
 };
 void testcases()
 {
     avl<int>tree;
-    tree.display();
-    /*for(int i=1;i<=10;i++)
+    for(int i=1;i<=30;i+=4)
     {
         tree.insert_key(i);
         cout<<"-------------------------------------------"<<endl;
         tree.display();
-    }*/
+    }
+    for(int i=40;i>=1;i-=3)
+    {
+        tree.insert_key(i);
+        cout<<"-------------------------------------------"<<endl;
+        tree.display();
+    }
+    tree.insert_key(7);
+    cout<<"-------------------------------------------"<<endl;
+    tree.display();
+    tree.insert_key(6);
+    cout<<"-------------------------------------------"<<endl;
+    tree.display();
+    cout<<"-------------------------------------------"<<endl;
+    //cout<<tree.search_key(17)<<endl;
+    //cout<<tree.search_key(18)<<endl;
+    cout<<"-------------------------------------------"<<endl;
+    //tree.upper_bound(21);
+    //tree.lower_bound(21);
+    tree.delete_key(6);
+    tree.display();
+    cout<<"-------------------------------------------"<<endl;
+    tree.delete_key(5);
+    tree.delete_key(1);
+    tree.delete_key(1);
+    tree.display();
+    cout<<"-------------------------------------------"<<endl;
+    tree.delete_key(29);
+    tree.display();
+    cout<<"-------------------------------------------"<<endl;
+    //cout<<tree.count_key(49)<<endl;
+    
 }
 int main()
 {
