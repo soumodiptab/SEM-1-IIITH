@@ -6,7 +6,40 @@ class Employee
 {
     public:
     string name;
-    string emp_id;
+    long long int emp_id;
+    public:
+    Employee()
+    {
+        name="";
+        emp_id=0;
+    }
+    Employee(string name, long long int emp_id)
+    {
+        this->name=name;
+        this->emp_id=emp_id;
+    }
+    bool operator < (Employee x)
+    {
+        return this->emp_id < x.emp_id;
+    }
+    bool operator > (Employee x)
+    {
+        return this->emp_id > x.emp_id;
+    }
+    bool operator <= (Employee x)
+    {
+        return this->emp_id <= x.emp_id;
+    }
+    bool operator >= (Employee x)
+    {
+        return this->emp_id >= x.emp_id;
+    }
+    Employee* operator - (Employee x)
+    {
+        Employee* z=new Employee();
+        z->emp_id=this->emp_id-x.emp_id;
+        return z;
+    }
 };
 template<class T>
 class avl
@@ -304,7 +337,13 @@ class avl
         }
         return head;
     }
-
+    /**
+     * @brief 
+     * 
+     * @param head 
+     * @param key 
+     * @param cache 
+     */
     void upper(Node* head, T key,T& cache)
     {
         if(head==NULL)
@@ -319,6 +358,13 @@ class avl
             upper(head->right,key,cache);
         }
     }
+    /**
+     * @brief 
+     * 
+     * @param head 
+     * @param key 
+     * @param cache 
+     */
     void lower(Node* head, T key,T& cache)
     {
         if(head==NULL)
@@ -399,19 +445,80 @@ class avl
         else
             cout<<ERROR;
     }
+    T min_value_tree(Node* head)
+    {
+        if(head->left)
+        {
+            return min_value_tree(head->left);
+        }
+        else
+        {
+            return head->data;
+        }
+    }
+    T max_value_tree(Node* head)
+    {
+        if(head->right)
+        {
+            return max_value_tree(head->right);
+        }
+        else
+        {
+            return head->data;
+        }
+    }
+
     T closest(T key)
     {
-
+        if(root==NULL)
+        {
+            return NULL;
+        }
+        T max=max_value_tree(root);
+        T min=min_value_tree(root);
+        T upper_val=NULL;
+        T lower_val=NULL;
+        if(key > max)
+        {
+            return max;
+        }
+        else if(key < min)
+        {
+            return min;
+        }
+        else // key is tree bounds
+        {
+            upper(root,key,upper_val);
+            lower(root,key,lower_val);
+            if(upper_val != NULL && lower_val != NULL)
+            {
+                if((key - lower_val) <= (upper_val - key))
+                {
+                    return lower_val;
+                }
+                else
+                    return upper_val;
+            }
+            else if(upper_val==NULL)
+            {
+                return lower_val;
+            }
+            else
+            {
+                return upper_val;
+            }
+        }
     }
     T kth_largest(int k)
     {
         return kth(root,k);
     }
-    T count_range(T lower,T upper)
+    T range_count(T lower,T upper)
     {
-        
+
     }
-    void debug()
+    //------------------------------------------------------------------------------
+    void node_check()
     {
         Node *root=new Node(2);
         Node *l=new Node(1);
@@ -460,7 +567,10 @@ void testcases()
     tree.delete_key(29);
     tree.display();
     cout<<"-------------------------------------------"<<endl;
-    cout<<tree.kth_largest(7)<<endl;
+    //cout<<tree.kth_largest(7)<<endl;
+    cout<<tree.closest(42)<<endl;
+    cout<<tree.closest(35)<<endl;
+    cout<<tree.closest(1)<<endl;
     //cout<<tree.count_key(49)<<endl;
     
 }
