@@ -10,7 +10,7 @@ class Employee
     public:
     Employee()
     {
-        name="";
+        name="X";
         emp_id=0;
     }
     Employee(string name, long long int emp_id)
@@ -18,33 +18,45 @@ class Employee
         this->name=name;
         this->emp_id=emp_id;
     }
-    bool operator < (Employee x)
+    bool operator < (Employee const &x)
     {
         return this->emp_id < x.emp_id;
     }
-    bool operator > (Employee x)
+    bool operator > (Employee const &x)
     {
         return this->emp_id > x.emp_id;
     }
-    bool operator <= (Employee x)
+    bool operator <= (Employee const &x)
     {
         return this->emp_id <= x.emp_id;
     }
-    bool operator >= (Employee x)
+    bool operator >= (Employee const &x)
     {
         return this->emp_id >= x.emp_id;
     }
-    bool operator == (Employee x)
+    bool operator == (Employee const &x)
     {
         return this->emp_id == x.emp_id;
     }
-    Employee* operator - (Employee x)
+    Employee operator - (Employee const &x)
     {
-        Employee* z=new Employee();
-        z->emp_id=this->emp_id-x.emp_id;
+        Employee z;
+        z.emp_id=this->emp_id-x.emp_id;
+        return z;
+    }
+    Employee operator + (Employee const &x)
+    {
+        Employee z;
+        z.emp_id=this->emp_id+x.emp_id;
         return z;
     }
 };
+ostream& operator<< (ostream &out, Employee const &emp)
+{
+    out<<emp.emp_id<<":"<<emp.name;
+    return out;
+}
+
 template<class T>
 class avl
 {
@@ -67,7 +79,7 @@ class avl
             right=NULL;
         }
     };
-    Node *root;
+    Node *root=NULL;
     /*----------Utility apis which is used in other functions------------*/
     public:
     /*--------------------------------------------------------------------*/
@@ -115,7 +127,8 @@ class avl
     }
  
     showTrunks(trunk);
-    cout<<root->data <<","<<root->count<<","<<root->height<< endl;
+    //cout<<root->data <<","<<root->count<<","<<root->height<< endl;
+    cout<<root->data << "["<<root->count<<"]"<<","<<root->left_count<<","<<root->right_count<< endl;
     if (prev) {
         prev->str = prev_str;
     }
@@ -318,7 +331,7 @@ class avl
             {
                 Node* new_target=inorder_predecessor(head->left);
                 transfer(head,new_target);
-                head->left_count=new_target->count;
+                head->left_count--;
                 head->left=del(head->left,head->data);
             }
             else
@@ -597,9 +610,9 @@ class avl
             }
             if(!search_key(up_key))
             {
-                if(up_key > max_node_val)
+                if(up_key > max_node_val)//out of bounds
                     actual_up_key=max_node_val;
-                else
+                else//doesnt exist
                     actual_up_key=lower_bound(up_key);
             }
             int total_count=root->left_count+root->count+root->right_count;
@@ -647,17 +660,24 @@ void testcases()
     cout<<"-------------------------------------------"<<endl;
     //tree.upper_bound(21);
     //tree.lower_bound(21);
+    cout<<"***DELETION TESTING***"<<endl;
+    cout<<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<endl;
     tree.delete_key(6);
     tree.display();
-    cout<<"-------------------------------------------"<<endl;
+    cout<<"-------------------------------------------[6]"<<endl;
     tree.delete_key(5);
-    tree.delete_key(1);
+    tree.display();
+    cout<<"-------------------------------------------[5]"<<endl;
     tree.delete_key(1);
     tree.display();
-    cout<<"-------------------------------------------"<<endl;
+    cout<<"-------------------------------------------[1]"<<endl;
+    tree.delete_key(1);
+    tree.display();
+    cout<<"-------------------------------------------[1]"<<endl;
     tree.delete_key(29);
     tree.display();
-    cout<<"-------------------------------------------"<<endl;
+    cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<endl;
+    cout<<"-------------------------------------------[29]"<<endl;
     //cout<<tree.kth_largest(7)<<endl;
     cout<<tree.closest(42)<<endl;
     cout<<tree.closest(35)<<endl;
@@ -667,10 +687,63 @@ void testcases()
     //tree.range_count(1,42);
     cout<<tree.upper_count_testing(7)<<endl;
     cout<<tree.lower_count_testing(22)<<endl;
-    
+    cout<<"--------------------------------------------"<<endl;
+    cout<<tree.range_count(4,10)<<endl;
+    cout<<tree.range_count(1,41)<<endl;
+}
+void string_test_case()
+{
+
+    avl<string>xtree;
+    for(int i='A';i<'Z';i+=3)
+    {
+        char ch=i;
+        string x(1,ch);
+        xtree.insert_key(x);
+    }
+    cout<<"--------------------------------------------"<<endl;
+    xtree.display();
+    for(int i='Z';i>='A';i-=4)
+    {
+        char ch=i;
+        string x(1,ch);
+        xtree.insert_key(x);
+    }
+    cout<<"--------------------------------------------"<<endl;
+    xtree.insert_key("J");
+    xtree.display();
+    cout<<"--------------------------------------------"<<endl;
+    xtree.insert_key("G");
+    xtree.display();
+    cout<<"--------------------------------------------"<<endl;
+    xtree.insert_key("DRAGON");
+    xtree.display();
+    cout<<"--------------------------------------------"<<endl;
+    xtree.delete_key("G");
+    xtree.display();
+    cout<<"--------------------------------------------[del G]"<<endl;
+     xtree.delete_key("F");
+    xtree.display();
+    cout<<"--------------------------------------------[del F]"<<endl;
+}
+void object_test_case()
+{
+    avl<Employee>otree;
+    Employee n1("John",120);
+    Employee n2("Hammond",131);
+    Employee n3("Dr.",23);
+    otree.insert_key(n1);
+    otree.insert_key(n2);
+    otree.insert_key(n3);
+    cout<<"---------------------------------------------------"<<endl;
+    otree.display();
+    cout<<"---------------------------------------------------"<<endl;
+
 }
 int main()
 {
     testcases();
+    string_test_case();
+    object_test_case();
     return 0;
 }
