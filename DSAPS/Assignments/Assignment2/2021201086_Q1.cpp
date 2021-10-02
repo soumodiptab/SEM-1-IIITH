@@ -34,6 +34,10 @@ class Employee
     {
         return this->emp_id >= x.emp_id;
     }
+    bool operator == (Employee x)
+    {
+        return this->emp_id == x.emp_id;
+    }
     Employee* operator - (Employee x)
     {
         Employee* z=new Employee();
@@ -431,21 +435,15 @@ class avl
     {
         T lower_bound_value=NULL;
         lower(root,key,lower_bound_value);
-        if(lower_bound_value!=NULL)
-            cout<<lower_bound_value;
-        else
-            cout<<ERROR;
+        return lower_bound_value;
     }
-    void upper_bound(T key)
+    T upper_bound(T key)
     {
         T upper_bound_value=NULL;
         upper(root,key,upper_bound_value);
-        if(upper_bound_value!=NULL)
-            cout<<upper_bound_value;
-        else
-            cout<<ERROR;
+        return upper_bound_value;
     }
-    T min_value_tree(Node* head)
+    Node* min_value_tree(Node* head)
     {
         if(head->left)
         {
@@ -453,10 +451,10 @@ class avl
         }
         else
         {
-            return head->data;
+            return head;
         }
     }
-    T max_value_tree(Node* head)
+    Node* max_value_tree(Node* head)
     {
         if(head->right)
         {
@@ -464,7 +462,7 @@ class avl
         }
         else
         {
-            return head->data;
+            return head;
         }
     }
 
@@ -474,8 +472,8 @@ class avl
         {
             return NULL;
         }
-        T max=max_value_tree(root);
-        T min=min_value_tree(root);
+        T max=max_value_tree(root)->data;
+        T min=min_value_tree(root)->data;
         T upper_val=NULL;
         T lower_val=NULL;
         if(key > max)
@@ -513,9 +511,102 @@ class avl
     {
         return kth(root,k);
     }
-    T range_count(T lower,T upper)
+    /**
+     * @brief Finds the count of nodes greater than a key
+     * 
+     * @param key 
+     * @return int 
+     */
+    int upper_count(Node *head,T key)
     {
-
+        if(head==NULL)
+        {
+            return 0;
+        }
+        if(key < head->data)//go left and add
+        {
+            return head->count+head->right_count+upper_count(head->left,key);
+        }
+        else if(key > head->data)//go right without adding
+        {
+            return upper_count(head->right,key);
+        }
+        else//key match
+        {
+            return head->right_count;
+        }
+    }
+    int upper_count_testing(T key)
+    {
+        return upper_count(root,key);
+    }
+    /**
+     * @brief Finds the count of nodes lesser than a key
+     * 
+     * @param key 
+     * @return int 
+     */
+    int lower_count(Node *head,T key)
+    {
+        if(head==NULL)
+        {
+            return 0;
+        }
+        if(key < head->data)//go left without adding
+        {
+            return lower_count(head->left,key);
+        }
+        else if(key > head->data)//go right and add
+        {
+            return head->count+head->left_count+lower_count(head->right,key);
+        }
+        else//key match
+        {
+            return head->left_count;
+        }
+    }
+    int lower_count_testing(T key)
+    {
+        return lower_count(root,key);
+    }
+    int range_count(T low_key,T up_key)
+    {
+        if(root==NULL)
+         return 0;
+        T max_node_val=max_value_tree(root)->data;
+        T min_node_val=min_value_tree(root)->data;
+        //out of range
+        if(up_key>max_node_val && low_key>max_node_val)
+        {
+            return 0;
+        }
+        else if(low_key<min_node_val && up_key < min_node_val)
+        {
+            return 0;
+        }
+        else // within avl bounds partial/full
+        {
+            T actual_low_key=low_key;
+            T actual_up_key=up_key;
+            if(!search_key(low_key))
+            {
+                if(low_key< min_node_val)
+                    actual_low_key=min_node_val;
+                else
+                    actual_low_key=upper_bound(low_key);
+            }
+            if(!search_key(up_key))
+            {
+                if(up_key > max_node_val)
+                    actual_up_key=max_node_val;
+                else
+                    actual_up_key=lower_bound(up_key);
+            }
+            int total_count=root->left_count+root->count+root->right_count;
+            int up_out_of_range=upper_count(root,actual_up_key);
+            int low_out_of_range=lower_count(root,actual_low_key);
+            return total_count-up_out_of_range-low_out_of_range;
+        }
     }
     //------------------------------------------------------------------------------
     void node_check()
@@ -571,7 +662,11 @@ void testcases()
     cout<<tree.closest(42)<<endl;
     cout<<tree.closest(35)<<endl;
     cout<<tree.closest(1)<<endl;
+    cout<<tree.lower_bound(1)<<endl;
     //cout<<tree.count_key(49)<<endl;
+    //tree.range_count(1,42);
+    cout<<tree.upper_count_testing(7)<<endl;
+    cout<<tree.lower_count_testing(22)<<endl;
     
 }
 int main()
