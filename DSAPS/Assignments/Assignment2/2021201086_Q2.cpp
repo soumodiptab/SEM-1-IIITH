@@ -53,6 +53,12 @@ class unordered_map
     public:
     void insert(T key, V value)
     {
+        Node *target=find_node(key);
+        if(target!=NULL)
+        {
+            target->value=value;
+            return;
+        }
         int position=hash_function(key);//find using hashing
         Node* new_node=new Node(key,value);
         Node* head=buckets[position];
@@ -107,6 +113,10 @@ class unordered_map
         {
             cout<<i<<" "<<hash_function(i)<<endl;
         }
+    }
+    void display()
+    {
+
     }
 };
 void testcases()
@@ -171,7 +181,7 @@ void problem()
 }
 int main()
 {
-    //testcases();
-    problem();
+    testcases();
+    //problem();
     return 0;
 }
