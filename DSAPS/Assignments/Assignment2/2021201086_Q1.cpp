@@ -446,8 +446,10 @@ class avl
     }
     T lower_bound(T key)
     {
+        if(search_key(key))
+            return key;
         T lower_bound_value=NULL;
-        lower(root,key,lower_bound_value);
+        upper(root,key,lower_bound_value);
         return lower_bound_value;
     }
     T upper_bound(T key)
@@ -606,14 +608,14 @@ class avl
                 if(low_key< min_node_val)
                     actual_low_key=min_node_val;
                 else
-                    actual_low_key=upper_bound(low_key);
+                    actual_low_key=upper(root,low_key)->data;
             }
             if(!search_key(up_key))
             {
                 if(up_key > max_node_val)//out of bounds
                     actual_up_key=max_node_val;
                 else//doesnt exist
-                    actual_up_key=lower_bound(up_key);
+                    actual_up_key=lower(root,up_key)->data;
             }
             int total_count=root->left_count+root->count+root->right_count;
             int up_out_of_range=upper_count(root,actual_up_key);
