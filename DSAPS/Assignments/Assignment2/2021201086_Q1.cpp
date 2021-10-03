@@ -428,7 +428,9 @@ class avl
         }
         else
         {
-            root=del(root,key);
+            int val=count_key(key);
+            while(val--)
+                root=del(root,key);
         }
     }
 
@@ -665,11 +667,11 @@ void testcases()
     cout<<"-------------------------------------------"<<endl;
     tree.display();
     cout<<"-------------------------------------------"<<endl;
-    //cout<<tree.search_key(17)<<endl;
-    //cout<<tree.search_key(18)<<endl;
+    cout<<tree.search_key(17)<<endl;
+    cout<<tree.search_key(18)<<endl;
     cout<<"-------------------------------------------"<<endl;
-    //tree.upper_bound(21);
-    //tree.lower_bound(21);
+    tree.upper_bound(21);
+    tree.lower_bound(21);
     cout<<"***DELETION TESTING***"<<endl;
     cout<<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<endl;
     tree.delete_key(6);
@@ -688,13 +690,13 @@ void testcases()
     tree.display();
     cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<endl;
     cout<<"-------------------------------------------[29]"<<endl;
-    //cout<<tree.kth_largest(7)<<endl;
+    cout<<tree.kth_largest(7)<<endl;
     cout<<tree.closest(42)<<endl;
     cout<<tree.closest(35)<<endl;
     cout<<tree.closest(1)<<endl;
     cout<<tree.lower_bound(1)<<endl;
-    //cout<<tree.count_key(49)<<endl;
-    //tree.range_count(1,42);
+    cout<<tree.count_key(49)<<endl;
+    tree.range_count(1,42);
     cout<<tree.upper_count_testing(7)<<endl;
     cout<<tree.lower_count_testing(22)<<endl;
     cout<<"--------------------------------------------"<<endl;

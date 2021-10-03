@@ -1,31 +1,23 @@
-#include<iostream>
-#include<sstream>
+// { Driver Code Starts
+#include <bits/stdc++.h>
 using namespace std;
-class employee
-{
-    public:
-    int empid=10;
-};
 
-/**
- * @brief Hash Map with O(1) complexity uses Chaining
- * 
- * @tparam T key value <typename>
- * @tparam V Value corresponding to key <class/typename>
- */
-template <typename T,class V>
-class unordered_map
+
+
+ // } Driver Code Ends
+
+class unordered_mp
 {
     const static int MAX_BUCKET_SIZE=100000;
     const int prime=31;
     class Node
     {
         public:
-        T key;
-        V value;
+        int key;
+        int value;
         Node* prev;
         Node* next;
-        Node(T key,V value)
+        Node(int key,int value)
         {
             this->key=key;
             this->value=value;
@@ -35,14 +27,14 @@ class unordered_map
     };
     //util functions:
     Node *buckets[MAX_BUCKET_SIZE]={NULL};
-    string convert_to_String(T key)
+    string convert_to_String(int key)
     {
         ostringstream stream;
         stream << key;
         string converted_string=stream.str();
         return converted_string;
     }
-    int hash_function(T key)
+    int hash_function(int key)
     {
         long long int hashed_value=0;
         string key_string=convert_to_String(key);
@@ -54,7 +46,7 @@ class unordered_map
         }
         return hashed_value;
     }
-    Node* find_node(T key)
+    Node* find_node(int key)
     {
         int position=hash_function(key);
         Node *iter=buckets[position];
@@ -65,11 +57,7 @@ class unordered_map
         return iter;
     }
     public:
-    unordered_map()
-    {
-        
-    }
-    void insert(T key, V value)
+    void insert(int key, int value)
     {
         Node *target=find_node(key);
         if(target!=NULL)
@@ -87,7 +75,7 @@ class unordered_map
         }
         buckets[position]=new_node;
     }
-    void erase(T key)
+    void erase(int key)
     {
         int position=hash_function(key);//hashing
         Node *iter=buckets[position];
@@ -112,92 +100,104 @@ class unordered_map
             buckets[position]=NULL;
         delete iter;
     }
-    bool find(T key)
+    bool find(int key)
     {
         return (find_node(key)!=NULL)?true:false;
     }
-    V &operator [](T key)
+    int& operator [](int key)
     {
         Node* temp=find_node(key);
         if(temp==NULL)
         {
-            static V val;
+            int val=0;
             insert(key,val);
             temp=find_node(key);
         }
         return temp->value;
     }
+    /**
+     * @brief Use this to check the location of hashed keys
+     * 
+     */
+    void debug()
+    {
+        for(int i=1;i<40;i++)
+        {
+            cout<<i<<" "<<hash_function(i)<<endl;
+        }
+    }
+    void display()
+    {
+
+    }
 };
-void testcases()
-{
-    unordered_map<int,int>mp;
-    mp.insert(10,13);
-    mp.insert(9,20);
-    mp.insert(29,30);
-    mp.erase(9);
-    cout<<mp[10]<<endl;
-    cout<<mp.find(29)<<endl;
-    mp.erase(10);
-    mp[29]+=40;
-    int a=1234.546;
-    employee emp1;
-    unordered_map<int,char>ms;
-    unordered_map<float,employee>mo;
-    mo.insert(145.454,emp1);
-    ms[120];
-    unordered_map<int,string>smap;
-    smap.insert(123,"hello");
-    cout<<smap[1245]<<endl;
-}
-/**
- * @brief Count no. of distinct elements in every sub-array of size k
- * 
- */
-void problem()
-{
-    unordered_map<int,int>mp;
-    int n,k,count=0;
-    cin>>n>>k;
-    int arr[n];
-    for(int i=0;i<n;i++)
+
+class Solution{
+  public:
+    vector <int> countDistinct (int arr[], int n, int k)
     {
-        cin>>arr[i];
+        vector<int>sol;
+        unordered_mp hm;
+
+    // initialize distinct element count for current window
+    int dist_count = 0;
+
+    // Traverse the first window and store count
+    // of every element in hash map
+    for (int i = 0; i < k; i++) {
+        if (hm[arr[i]] == 0) {
+            dist_count++;
+        }
+        hm.insert(arr[i],hm[arr[i]]+1);
     }
-    //initial window
-    for(int i=0;i<k;i++)
-    {
-        if(!mp.find(arr[i]))
-        {
-            mp.insert(arr[i],1);
-            count++;
+
+    // Print count of first window
+    sol.push_back(dist_count);
+
+    // Traverse through the remaining array
+    for (int i = k; i < n; i++) {
+        // Remove first element of previous window
+        // If there was only one occurrence, then reduce distinct count.
+        if (hm[arr[i - k]] == 1) {
+            dist_count--;
         }
-        else
-            mp[arr[i]]+=1;
+        // reduce count of the removed element
+        hm.insert(arr[i-k],hm[arr[i-k]]-1);
+
+        // Add new element of current window
+        // If this element appears first time,
+        // increment distinct element count
+
+        if (hm[arr[i]] == 0) {
+            dist_count++;
+        }
+        hm.insert(arr[i],hm[arr[i]]+1);
+
+        // Print count of current window
+        sol.push_back(dist_count);
     }
-    cout<<count;
-    for(int i=k;i<n;i++)
-    {
-        if(mp[arr[i-k]]==1)
-        {
-            count--;
-        }
-        mp[arr[i-k]]-=1;
-        if(!mp.find(arr[i]))
-        {
-            count++;
-            mp.insert(arr[i],1);
-        }
-        else
-        {
-            mp[arr[i]]+=1;
-        }
-        cout<<" "<<count;
+        return sol;
     }
-}
+};
+
+// { Driver Code Starts.
 int main()
 {
-    testcases();
-    //problem();
-    int y=123;
+    int t;
+    cin >> t;
+    while (t--)
+    {
+
+        int n, k;
+        cin >> n >> k;
+        int a[n];
+        for (int i = 0; i < n; i++) 
+        	cin >> a[i];
+        Solution obj;
+        vector <int> result = obj.countDistinct(a, n, k);
+        for (int i : result) 
+        	cout << i << " ";
+        cout << endl;
+    }
     return 0;
-}
+}  // } Driver Code Ends
