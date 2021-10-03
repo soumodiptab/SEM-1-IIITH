@@ -1,4 +1,5 @@
 #include<iostream>
+#include<sstream>
 using namespace std;
 /**
  * @brief Hash Map with O(1) complexity uses Chaining
@@ -28,10 +29,17 @@ class unordered_map
     };
     //util functions:
     Node *buckets[MAX_BUCKET_SIZE]={NULL};
+    string convert_to_String(T key)
+    {
+        ostringstream stream;
+        stream << key;
+        string converted_string=stream.str();
+        return converted_string;
+    }
     int hash_function(T key)
     {
         long long int hashed_value=0;
-        string key_string=to_string(key);
+        string key_string=convert_to_String(key);
         long long int factor = 1;
         for (char letter : key_string)
         {
@@ -101,6 +109,10 @@ class unordered_map
     V &operator [](T key)
     {
         Node* temp=find_node(key);
+        if(temp==NULL)
+        {
+            insert(key,NULL);
+        }
         return temp->value;
     }
     /**
@@ -131,6 +143,13 @@ void testcases()
     mp.erase(10);
     mp[29]+=40;
     int a=1234.546;
+    unordered_map<int,string>ms;
+    ms[120];
+    unordered_map<string,float>mx;
+    mx["hello"];
+    cout<<mx["hello"]<<endl;
+    mx["hello"]+=4.0345;
+    cout<<mx["hello"]<<endl;
 }
 /**
  * @brief Count no. of distinct elements in every sub-array of size k
@@ -183,5 +202,7 @@ int main()
 {
     testcases();
     //problem();
+    string x="hi";
+    int y=123;
     return 0;
 }
