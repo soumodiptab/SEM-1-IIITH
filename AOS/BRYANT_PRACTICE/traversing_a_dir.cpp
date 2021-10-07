@@ -20,11 +20,9 @@ void print_stat(string path,string name)
     printf((flag& S_IRUSR)? "r":"-");
     printf((flag & S_IWUSR)? "w":"-");
     printf((flag & S_IXUSR)? "x":"-");
-    printf(" ");
     printf((flag & S_IRGRP)? "r":"-");
     printf((flag & S_IWGRP)? "w":"-");
     printf((flag & S_IXGRP)? "x":"-");
-    printf(" ");
     printf((flag & S_IROTH)? "r":"-");
     printf((flag & S_IWOTH)? "w":"-");
     printf((flag & S_IXOTH)? "x":"-");

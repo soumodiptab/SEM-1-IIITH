@@ -36,7 +36,7 @@ class deque
     deque()
     {
         t_size=0;
-        capacity=10;
+        capacity=1;
         init();
     }
     deque(int n,T val)
@@ -215,7 +215,22 @@ void testcases()
     q.display();
     q.resize(6,1);
     q.display();
-    deque<string>q1(10,"hello");
+    deque<string>q1(2,"hello");
+    q1.display();
+    q1.resize(6,"world");
+    q1.resize(5,"yx");
+    q1.pop_back();
+    q1.pop_front();
+    q1.pop_back();
+    q1.pop_front();
+    q1.pop_back();
+    q1.display();
+    q1.push_front("one");
+    q1.push_back("two");
+    q1.resize(6,"default");
+    q1.push_back("do");
+    q1.push_back("done");
+    q1.push_front("hi");
     q1.display();
 }
 int main()
