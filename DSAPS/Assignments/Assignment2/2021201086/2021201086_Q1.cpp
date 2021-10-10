@@ -56,7 +56,6 @@ ostream& operator<< (ostream &out, Employee const &emp)
     out<<emp.emp_id<<":"<<emp.name;
     return out;
 }
-
 template<class T>
 class avl
 {
@@ -96,16 +95,16 @@ class avl
             this->str = str;
         }
     };
-    void showTrunks(Trunk *p)
+    void show_trunks(Trunk *p)
     {
         if (p == nullptr)
         {
             return;
         }
-        showTrunks(p->prev);
+        show_trunks(p->prev);
         cout << p->str;
     }
-    void printTree(Node* root, Trunk *prev, bool isLeft)
+    void print_tree(Node* root, Trunk *prev, bool isLeft)
     {
     if(root == NULL)
     {
@@ -113,7 +112,7 @@ class avl
     }
     string prev_str = "    ";
     Trunk *trunk = new Trunk(prev, prev_str);
-    printTree(root->right, trunk, true);
+    print_tree(root->right, trunk, true);
  
     if (!prev) {
         trunk->str = "————";
@@ -128,7 +127,7 @@ class avl
         prev->str = prev_str;
     }
  
-    showTrunks(trunk);
+    show_trunks(trunk);
     //cout<<root->data <<","<<root->count<<","<<root->height<< endl;
     cout<<root->data << "["<<root->count<<"]"<<","<<root->left_count<<","<<root->right_count<< endl;
     if (prev) {
@@ -136,11 +135,11 @@ class avl
     }
     trunk->str = "   |";
  
-    printTree(root->left, trunk, false);
+    print_tree(root->left, trunk, false);
     }
     void display()
     {
-        printTree(root, NULL, false);
+        print_tree(root, NULL, false);
     }
 
     /*-------------------------------------------------------------------*/
@@ -444,13 +443,13 @@ class avl
     {
         Node* temp=search(root,key);
         if(temp==NULL)
-            return -1;
+            return 0;
         else
             return temp->count;
     }
     T lower_bound_non_stl(T key)
     {
-        T lower_bound_value=NULL;
+        T lower_bound_value={};
         lower(root,key,lower_bound_value);
         return lower_bound_value;
     }
@@ -458,13 +457,13 @@ class avl
     {
         if(search_key(key))
             return key;
-        T lower_bound_value=NULL;
+        T lower_bound_value={};
         upper(root,key,lower_bound_value);
         return lower_bound_value;
     }
     T upper_bound(T key)
     {
-        T upper_bound_value=NULL;
+        T upper_bound_value={};
         upper(root,key,upper_bound_value);
         return upper_bound_value;
     }
@@ -499,8 +498,8 @@ class avl
         }
         T max=max_value_tree(root)->data;
         T min=min_value_tree(root)->data;
-        T upper_val=NULL;
-        T lower_val=NULL;
+        T upper_val={};
+        T lower_val={};
         if(key > max)
         {
             return max;
@@ -633,6 +632,22 @@ class avl
             return total_count-up_out_of_range-low_out_of_range;
         }
     }
+    void inorder_core(Node *head)
+    {
+        if(head==NULL)
+        {
+            return;
+        }
+        inorder_core(head->left);
+        cout<<head->data<<" ";
+        inorder_core(head->right);
+    }
+    void inorder()
+    {
+        if(root!=NULL)
+            inorder_core(root);
+        cout<<endl;
+    }
     //------------------------------------------------------------------------------
     void node_check()
     {
@@ -688,8 +703,11 @@ void testcases()
     cout<<"-------------------------------------------[1]"<<endl;
     tree.delete_key(29);
     tree.display();
-    cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<endl;
     cout<<"-------------------------------------------[29]"<<endl;
+    tree.delete_key(7);
+    tree.display();
+    cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<endl;
+    cout<<"-------------------------------------------[7]"<<endl;
     cout<<tree.kth_largest(7)<<endl;
     cout<<tree.closest(42)<<endl;
     cout<<tree.closest(35)<<endl;
@@ -736,6 +754,8 @@ void string_test_case()
     cout<<"--------------------------------------------[del G]"<<endl;
      xtree.delete_key("F");
     xtree.display();
+    xtree.inorder();
+    cout<<xtree.lower_bound("Z")<<endl;
     cout<<"--------------------------------------------[del F]"<<endl;
 }
 void object_test_case()
@@ -744,13 +764,16 @@ void object_test_case()
     Employee n1("John",120);
     Employee n2("Hammond",131);
     Employee n3("Dr.",23);
+    Employee n4("Zorro",34);
     otree.insert_key(n1);
     otree.insert_key(n2);
+    otree.insert_key(n3);
     otree.insert_key(n3);
     cout<<"---------------------------------------------------"<<endl;
     otree.display();
     cout<<"---------------------------------------------------"<<endl;
-
+    cout<<otree.count_key(n4)<<endl;
+    cout<<otree.upper_bound(n2)<<endl;
 }
 int main()
 {

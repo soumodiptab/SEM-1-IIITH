@@ -1,5 +1,6 @@
 #include<iostream>
 #include<sstream>
+#include<vector>
 using namespace std;
 class employee
 {
@@ -16,7 +17,7 @@ class employee
 template <typename T,class V>
 class unordered_map
 {
-    const static int MAX_BUCKET_SIZE=100000;
+    const static int MAX_BUCKET_SIZE=1000000;
     const int prime=31;
     class Node
     {
@@ -153,20 +154,17 @@ void testcases()
  * @brief Count no. of distinct elements in every sub-array of size k
  * 
  */
-void problem()
+template <class V>
+vector<int> problem(V *arr,int n ,int k)
 {
+    vector<int>sol;
     unordered_map<int,int>mp;
-    int n,k,count=0;
-    cin>>n>>k;
-    int arr[n];
-    for(int i=0;i<n;i++)
-    {
-        cin>>arr[i];
-    }
+    int count=0;
+    
     //initial window
     for(int i=0;i<k;i++)
     {
-        if(!mp.find(arr[i]))
+        if(mp[arr[i]]==0)
         {
             mp.insert(arr[i],1);
             count++;
@@ -174,7 +172,8 @@ void problem()
         else
             mp[arr[i]]+=1;
     }
-    cout<<count;
+    if(n!=0)
+        sol.push_back(count);
     for(int i=k;i<n;i++)
     {
         if(mp[arr[i-k]]==1)
@@ -182,7 +181,7 @@ void problem()
             count--;
         }
         mp[arr[i-k]]-=1;
-        if(!mp.find(arr[i]))
+        if(mp[arr[i]]==0)
         {
             count++;
             mp.insert(arr[i],1);
@@ -191,13 +190,33 @@ void problem()
         {
             mp[arr[i]]+=1;
         }
-        cout<<" "<<count;
+        sol.push_back(count);
+    }
+    return sol;
+}
+void driver()
+{
+    int t,n,k;
+    cin>>t;
+    while(t--)
+    {
+        cin>>n>>k;
+        int arr[n];
+        for(int i=0;i<n;i++)
+        {
+            cin>>arr[i];
+        }
+        vector<int>sol=problem<int>(arr,n,k);
+        for(int i=0;i<sol.size();i++)
+        {
+            cout<<sol[i]<<" ";
+        }
+        cout<<endl;
     }
 }
 int main()
 {
-    testcases();
-    //problem();
-    int y=123;
+    //testcases();
+    driver();
     return 0;
 }

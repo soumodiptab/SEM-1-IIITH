@@ -134,14 +134,16 @@ class deque
     }
     T front()
     {
+        static T val;
         if(t_size==0)
-            return NULL;
+            return val;
         return data[p_front];
     }
     T back()
     {
+        static T val;
         if(t_size==0)
-            return NULL;
+            return val;
         return data[rear];
     }
     bool empty()
@@ -183,8 +185,11 @@ class deque
     }
     T operator [](int index)
     {
-        if(index>=t_size)
-            return NULL;
+        static T val;
+        if(index>=t_size || index<0)
+        {
+            return val;
+        }
         int pos=(p_front+index)%capacity;
         return data[pos];
     }
@@ -232,9 +237,65 @@ void testcases()
     q1.push_back("done");
     q1.push_front("hi");
     q1.display();
+    cout<<q1[8]<<endl;
+    cout<<q1[0]<<endl;
+}
+void driver()
+{
+    deque<int>q;
+    int testcases,ch,num,sz;
+    cin>>testcases;
+    while(testcases--)
+    {
+		cin>>ch;
+		switch(ch){
+			case 1:
+				cin>>num;
+				q.push_front(num);
+				break;	
+			case 2:
+				q.pop_front();
+				break;	
+			case 3:
+				cin>>num;
+				q.push_back(num);
+				break;
+			case 4:
+				q.pop_back();
+				break;
+			case 5:
+				cout<<q.front()<<endl;
+				break;			
+			case 6:
+                cout<<q.back()<<endl;
+			case 7:
+				cout<<q.empty()<<endl;
+				break;
+			case 8:
+				cout<<q.size()<<endl;
+				break;
+			case 9:
+                cin>>sz>>num;
+				q.resize(sz,num);
+				break;
+			case 10:
+				q.clear();
+				break;
+			case 11:
+				cin>>num;
+                cout<<q[num]<<endl;
+				break;
+			case 12:
+				q.display();
+				break;			
+			default:
+				cout<<"err"<<endl;
+		}
+	}
 }
 int main()
 {
     testcases();
+    //driver();
     return 0;
 }

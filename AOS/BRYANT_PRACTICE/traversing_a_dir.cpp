@@ -37,34 +37,39 @@ void seperator()
  * 
  * @param path the path of the directory
  */
-void traverse_dir(string path)
+bool search(string path,string target)
 {
-    strcpy(buffer,path.c_str());
-    DIR* dir_stream=opendir(buffer);
+    bool flag=false;
+    DIR* dir_stream=opendir(path.c_str());
     //if no more directory stream then just return
     if(dir_stream==NULL)
     {
-        return;
+        return false;
     }
     struct dirent* entity=readdir(dir_stream);
     while(entity!=NULL)
     {
+        if(string(entity->d_name) == target)
+        {
+            closedir(dir_stream);
+            return true;
+        }
         string new_path=path;
         new_path.append("/");
         new_path.append(string(entity->d_name));
         if(entity->d_type == DT_DIR && strcmp(entity->d_name,".")!=0 && strcmp(entity->d_name,"..")!=0)
         {
-            seperator();
-            print_stat(new_path,string(entity->d_name));
-            seperator();
-            traverse_dir(new_path);
-            seperator();
+            flag= flag || search(new_path,target);
+            if(flag)
+            {
+                closedir(dir_stream);
+                return flag;   
+            }
         }
-        else
-            print_stat(new_path,string(entity->d_name));
         entity=readdir(dir_stream);
     }
     closedir(dir_stream);
+    return false;
 }
 int main()
 {
