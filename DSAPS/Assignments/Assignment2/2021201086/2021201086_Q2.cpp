@@ -17,7 +17,7 @@ class employee
 template <typename T,class V>
 class unordered_map
 {
-    const static int MAX_BUCKET_SIZE=5183869;
+    const static int MAX_BUCKET_SIZE=953917;
     const int prime=31;
     class Node
     {
