@@ -71,7 +71,13 @@ bool search(string path,string target)
     closedir(dir_stream);
     return false;
 }
+void fun()
+{
+    cout<<"bye bye";
+}
 int main()
 {
-    traverse_dir(".");
+    atexit(fun);
+    cout<<"hello"<<endl;
+    return 0;   
 }
