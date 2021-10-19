@@ -1,5 +1,5 @@
 #include <iostream>
-#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 using namespace std;
 /**
@@ -10,10 +10,12 @@ class node
 {
     public:
     node *child[26]={};
+    string word;
     bool is_end;
     node()
     {
         is_end=false;
+        word="";
     }
 };
 class dictionary
@@ -21,7 +23,9 @@ class dictionary
     //Following are the apis of trie
     node *root=new node();
     int number_of_words;
+    int min(int a,int b,int c);
     void suggest_words(string prefix,node *current,vector<string>&sol);
+    int get_edit_distance(string word_a,string word_b);
     public:
     dictionary()
     {
@@ -30,6 +34,7 @@ class dictionary
     void insert_word(string word);
     bool spell_check(string word);
     int get_word_count();
+    vector<string> get_all_words();
     vector<string> autocomplete(string query);
     string autocorrect(string word);
 
@@ -56,6 +61,7 @@ void dictionary::insert_word(string word)
         current=current->child[index];
     }
     current->is_end=true;
+    current->word=word;
     number_of_words++;
 }
 bool dictionary::spell_check(string word)
@@ -110,6 +116,37 @@ void dictionary::suggest_words(string prefix,node *current,vector<string>&sol)
             prefix.pop_back();
         }
     }
+}
+int dictionary::min(int a,int b,int c)
+{
+    return std::min(a,std::min(b,c));
+}
+int dictionary::get_edit_distance(string word_a,string word_b)
+{
+    int cache[word_a.length()+1][word_b.length()+1];
+    for(int i=0;i<=word_a.length();i++)
+    {
+        for(int j=0;j<=word_b.length();j++)
+        {
+            if(i==0)
+            {
+                cache[i][j]=j;
+            }
+            else if(j==0)
+            {
+                cache[i][j]=i;
+            }
+            else if(word_a[i]==word_b[j])//match
+            {
+                cache[i][j]=cache[i-1][j-1];
+            }
+            else
+            {
+                cache[i][j]=min(cache[i][j-1],cache[i-1][j-1],cache[i-1][j]);
+            }
+        }
+    }
+    return cache[word_a.length()][word_b.length()];
 }
 /**
  * @brief 

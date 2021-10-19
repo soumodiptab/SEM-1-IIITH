@@ -61,6 +61,7 @@ class grid
     int row;
     int col;
     char content[100][100];
+    int movement[2][4]={{-1,0,1,0},{0,-1,0,-1}};
     public:
     grid(int row,int col)
     {
@@ -98,7 +99,6 @@ class grid
             cout<<endl;
         }
     }
-
     void traverse_grid(int i,int j, node *current,dictionary &sol)
     {
         int index=get(i,j)-'a';//reduce to get(i,j) normalize later
@@ -115,10 +115,10 @@ class grid
         }
         char original=get(i,j);
         set(i,j,'#');
-        traverse_grid(i-1,j,current,sol);
-        traverse_grid(i,j-1,current,sol);
-        traverse_grid(i+1,j,current,sol);
-        traverse_grid(i,j+1,current,sol);
+        for(int k=0;k<4;k++)
+        {
+            traverse_grid(i+movement[0][k],j+movement[1][k],current,sol);
+        }
         set(i,j,original);
     }
     void solve(int x,string* word_list)

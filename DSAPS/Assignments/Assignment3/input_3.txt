@@ -3,5 +3,8 @@ o a a n
 e t a e
 i h k r
 i f l v
-1
-abcd
+4
+oath
+pea
+eat
+rain
