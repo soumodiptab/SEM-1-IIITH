@@ -10,12 +10,10 @@ class node
 {
     public:
     node *child[26]={};
-    string word;
     bool is_end;
     node()
     {
         is_end=false;
-        word="";
     }
 };
 class dictionary
@@ -24,7 +22,9 @@ class dictionary
     node *root=new node();
     int number_of_words;
     int min(int a,int b,int c);
+    bool size_check(string a,string b);
     void suggest_words(string prefix,node *current,vector<string>&sol);
+    void similar_words(string query,string prefix,node *current,vector<string>&sol);
     int get_edit_distance(string word_a,string word_b);
     public:
     dictionary()
@@ -32,11 +32,12 @@ class dictionary
         number_of_words=0;
     }
     void insert_word(string word);
+    node* find_node(string word);
     bool spell_check(string word);
     int get_word_count();
     vector<string> get_all_words();
     vector<string> autocomplete(string query);
-    string autocorrect(string word);
+    vector<string> autocorrect(string word);
 
 };
 int dictionary::get_word_count()
@@ -61,40 +62,33 @@ void dictionary::insert_word(string word)
         current=current->child[index];
     }
     current->is_end=true;
-    current->word=word;
     number_of_words++;
 }
 bool dictionary::spell_check(string word)
+{
+    node* target=find_node(word);
+    if(target==NULL)
+        return false;
+    return target->is_end;
+}
+node* dictionary::find_node(string word)
 {
     node *current=root;
     for(int i=0;i<word.length();i++)
     {
         int index=word[i]-'a';
         if(current->child[index]==NULL)
-        {
-            return false;
-        }
+            return NULL;
         current=current->child[index];
     }
-    return current->is_end;
+    return current;
 }
 vector<string> dictionary::autocomplete(string query)
 {
     //find target node first
     vector<string>suggestions;
     node *current=root;
-    node *target=NULL;
-    for(int i=0;i<query.length();i++)
-    {
-        int index=query[i]-'a';
-        if(current->child[index]==NULL)
-        {
-            target=NULL;
-            break;
-        }
-        current=current->child[index];
-        target=current;
-    }
+    node *target=find_node(query);
     if(target==NULL)
         return suggestions;//empty - no suggestion
     suggest_words(query,target,suggestions);
@@ -148,15 +142,48 @@ int dictionary::get_edit_distance(string word_a,string word_b)
     }
     return cache[word_a.length()][word_b.length()];
 }
+
+void dictionary::similar_words(string query,string prefix,node *current,vector<string>&sol)
+{
+    if(current->is_end && size_check(query,prefix) && get_edit_distance(query,prefix)<=3)
+    {
+        sol.push_back(prefix);
+    }
+    for(int i=0;i<26;i++)
+    {
+        if(current->child[i]!=NULL)
+        {
+            char ch='a'+i;
+            prefix.push_back(ch);
+            similar_words(query,prefix,current->child[i],sol);
+            prefix.pop_back();
+        }
+    }
+}
+bool size_check(string a,string b)
+{
+    int size=a.length()-b.length();
+    if(abs(size)>3)
+        return false;
+    return true;
+}
 /**
  * @brief 
  * 
  * @param word 
  * @return string 
  */
-string dictionary::autocorrect(string word)
+vector<string> dictionary::autocorrect(string word)
 {
-    
+    vector<string>sim_words;
+    node *target=find_node(word);
+    if(target!=NULL)
+    {
+        sim_words.push_back(word);
+        return sim_words;
+    }
+    similar_words(word,"",root,sim_words);
+    return sim_words;
 }
 /**
  * First line will contain number of words in dictionary n
