@@ -92,7 +92,7 @@ vector<string> dictionary::autocomplete(string query)
     if(target==NULL)
         return suggestions;//empty - no suggestion
     suggest_words(query,target,suggestions);
-    return suggestions;
+    return suggestions;//Partial prefix match , provide all suggestions after that prefix
 }
 void dictionary::suggest_words(string prefix,node *current,vector<string>&sol)
 {
@@ -119,7 +119,7 @@ void dictionary::suggest_words(string prefix,node *current,vector<string>&sol)
  */
 string dictionary::autocorrect(string word)
 {
-
+    
 }
 /**
  * First line will contain number of words in dictionary n
