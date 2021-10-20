@@ -33,12 +33,18 @@ class dictionary
     }
     void insert_word(string word);
     node* find_node(string word);
+    node* prefix_match(string word);
     bool spell_check(string word);
     int get_word_count();
     vector<string> get_all_words();
     vector<string> autocomplete(string query);
     vector<string> autocorrect(string word);
-
+    void test()
+    {
+        cout<<get_edit_distance("app","apple")<<endl;
+        cout<<get_edit_distance("dragon","rem")<<endl;
+        cout<<get_edit_distance("xcvy","rem")<<endl;
+    }
 };
 int dictionary::get_word_count()
 {
@@ -68,7 +74,9 @@ bool dictionary::spell_check(string word)
 {
     node* target=find_node(word);
     if(target==NULL)
+    {
         return false;
+    }
     return target->is_end;
 }
 node* dictionary::find_node(string word)
@@ -87,8 +95,10 @@ vector<string> dictionary::autocomplete(string query)
 {
     //find target node first
     vector<string>suggestions;
-    node *current=root;
-    node *target=find_node(query);
+    node *target;
+    target=root;
+    if(!query.empty())
+        target=find_node(query);
     if(target==NULL)
         return suggestions;//empty - no suggestion
     suggest_words(query,target,suggestions);
@@ -117,7 +127,7 @@ int dictionary::min(int a,int b,int c)
 }
 int dictionary::get_edit_distance(string word_a,string word_b)
 {
-    int cache[word_a.length()+1][word_b.length()+1];
+    vector<vector<int>>cache(word_a.length()+1,vector<int> (word_b.length()+1, 0));
     for(int i=0;i<=word_a.length();i++)
     {
         for(int j=0;j<=word_b.length();j++)
@@ -130,13 +140,13 @@ int dictionary::get_edit_distance(string word_a,string word_b)
             {
                 cache[i][j]=i;
             }
-            else if(word_a[i]==word_b[j])//match
+            else if(word_a[i-1]==word_b[j-1])//match
             {
                 cache[i][j]=cache[i-1][j-1];
             }
             else
             {
-                cache[i][j]=min(cache[i][j-1],cache[i-1][j-1],cache[i-1][j]);
+                cache[i][j]=1+min(cache[i][j-1],cache[i-1][j-1],cache[i-1][j]);
             }
         }
     }
@@ -160,7 +170,7 @@ void dictionary::similar_words(string query,string prefix,node *current,vector<s
         }
     }
 }
-bool size_check(string a,string b)
+bool dictionary::size_check(string a,string b)
 {
     int size=a.length()-b.length();
     if(abs(size)>3)
@@ -175,13 +185,8 @@ bool size_check(string a,string b)
  */
 vector<string> dictionary::autocorrect(string word)
 {
+    //Assumption: we print all words that are 3 edit distance away from the given word
     vector<string>sim_words;
-    node *target=find_node(word);
-    if(target!=NULL)
-    {
-        sim_words.push_back(word);
-        return sim_words;
-    }
     similar_words(word,"",root,sim_words);
     return sim_words;
 }
@@ -189,6 +194,13 @@ vector<string> dictionary::autocorrect(string word)
  * First line will contain number of words in dictionary n
  * Input the words
  */
+void print_vector(vector<string>stream)
+{
+    for(auto s:stream)
+    {
+        cout<<s<<endl;
+    }
+}
 void testcases()
 {
     dictionary dict=dictionary();
@@ -199,14 +211,53 @@ void testcases()
     dict.insert_word("app");
     dict.insert_word("dragon");
     dict.insert_word("herring");
+    dict.insert_word("hem");
     dict.insert_word("hoshigawa");
+    dict.insert_word("appl");
     cout<<dict.spell_check("hemlo")<<endl;
     cout<<dict.spell_check("hem")<<endl;
     cout<<dict.spell_check("appl")<<endl;
-    dict.autocomplete("der");
+    vector<string>suggest=dict.autocomplete("dra");
+    print_vector(suggest);
+    cout<<"------------------------------------"<<endl;
+    dict.test();
+    vector<string>simlilar=dict.autocorrect("appl");
+    print_vector(simlilar);
+}
+void test_case_large()
+{
+    
+}
+void driver()
+{
+    int words,option;
+    string temp;
+    cin>>words;
+    dictionary dict=dictionary();
+    for(int i=0;i<words;i++)
+    {
+        cin>>temp;
+        dict.insert_word(temp);
+    }
+    cin>>option;
+    cin>>temp;
+    switch(option)
+    {
+        case 1:
+        dict.spell_check(temp);
+        break;
+        case 2:
+        dict.autocomplete(temp);
+        break;
+        case 3:
+        dict.autocorrect(temp);
+        break;
+        default:
+    }
 }
 int main()
 {
-    testcases();
+    //testcases();
+    driver();
     return 0;
 }
