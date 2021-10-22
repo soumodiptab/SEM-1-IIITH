@@ -136,6 +136,17 @@ public:
         weights[v].push_back(make_pair(weight, u));
         edges++;
     }
+    void print_paths(vector<vector<int>> &paths)
+    {
+        for (auto p : paths)
+        {
+            for (auto vertex : p)
+            {
+                cout << vertex << " ";
+            }
+            cout << endl;
+        }
+    }
     /**
      * @brief create all possible paths
      * 
@@ -232,7 +243,8 @@ public:
             vector<int> best = select_best_path(all_paths);
             all_node_paths.push_back(best);
         }
-        cout << "hello";
+        all_node_paths.erase(all_node_paths.begin() + destination);
+        print_paths(all_node_paths);
     }
     void k_shortest_paths()
     {
