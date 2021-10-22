@@ -61,7 +61,7 @@ class grid
     int row;
     int col;
     char content[100][100];
-    int movement[2][4]={{-1,0,1,0},{0,-1,0,-1}};
+    int movement[2][4]={{-1,0,1,0},{0,-1,0,1}};
     public:
     grid(int row,int col)
     {

@@ -120,17 +120,17 @@ public:
      */
     vector<string> path_tracer(vector<vector<int>> &parent, int index)
     {
-        vector<string>paths;
-        if(index==-1)
+        vector<string> paths;
+        if (index == -1)
         {
             return paths;
         }
         string path = "";
         for (auto item : parent[index])
         {
-                path = to_string(item) + " " + path;
-            }
-            index = parent[index][0];
+            path = to_string(item) + " " + path;
+        }
+        index = parent[index][0];
         cout << path;
     }
     void shortest_path(int source)
