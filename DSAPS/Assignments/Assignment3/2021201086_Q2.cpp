@@ -2,6 +2,17 @@
 #include <limits>
 #include <vector>
 using namespace std;
+class tired_afk
+{
+    int number;
+    vector<tired_afk *> children;
+    tired_afk(int number)
+    {
+        this->number = number;
+        children = vector<tired_afk *>(number);
+    }
+};
+
 class priority_queue
 {
     vector<pair<int, int>> key_value;
@@ -91,6 +102,17 @@ public:
         return false;
     }
 };
+void reverse(vector<int> &array)
+{
+    int first = 0;
+    int last = array.size() - 1;
+    while (first < last)
+    {
+        swap(array[first], array[last]);
+        first++;
+        last--;
+    }
+}
 class graph
 {
     int nodes;
@@ -118,22 +140,50 @@ public:
      * @brief create all possible paths
      * 
      */
-    vector<string> path_tracer(vector<vector<int>> &parent, int index)
+    vector<vector<int>> path_tracer(vector<vector<int>> &parent, int index)
     {
-        vector<string> paths;
+        vector<vector<int>> paths;
         if (index == -1)
         {
             return paths;
         }
-        string path = "";
         for (auto item : parent[index])
         {
-            path = to_string(item) + " " + path;
+            vector<vector<int>> returned_paths = path_tracer(parent, item);
+            if (returned_paths.empty())
+            {
+                vector<int> path;
+                path.push_back(index);
+                paths.push_back(path);
+            }
+            else
+            {
+                for (auto p : returned_paths)
+                {
+                    p.push_back(index);
+                    paths.push_back(p);
+                }
+            }
         }
-        index = parent[index][0];
-        cout << path;
+        return paths;
     }
-    void shortest_path(int source)
+    vector<int> select_best_path(vector<vector<int>> &paths)
+    {
+        vector<int> min_path = paths[0];
+        for (int i = 1; i < paths.size(); i++)
+        {
+            for (int j = 0; j < (min_path.size()) && (j < paths[i].size()); j++)
+            {
+                if (paths[i][j] < min_path[j])
+                {
+                    min_path = paths[i];
+                    break;
+                }
+            }
+        }
+        return min_path;
+    }
+    vector<vector<int>> shortest_path(int source)
     {
         vector<bool> visited(nodes, false);
         vector<int> distance(nodes, numeric_limits<int>::max());
@@ -166,7 +216,23 @@ public:
                 }
             }
         }
-        path_tracer(parent, 3);
+        return parent;
+    }
+    void dijkstra_destination(int destination)
+    {
+        vector<vector<int>> parent = shortest_path(destination);
+        vector<vector<int>> all_node_paths;
+        for (int i = 0; i < nodes; i++)
+        {
+            vector<vector<int>> all_paths = path_tracer(parent, i);
+            for (auto &p : all_paths)
+            {
+                reverse(p);
+            }
+            vector<int> best = select_best_path(all_paths);
+            all_node_paths.push_back(best);
+        }
+        cout << "hello";
     }
     void k_shortest_paths()
     {
@@ -180,7 +246,7 @@ void testcases()
     g.add_edge(0, 3, 3);
     g.add_edge(0, 2, 2);
     g.add_edge(2, 3, 1);
-    g.shortest_path(0);
+    g.dijkstra_destination(3);
     cout << endl;
     graph g1(7);
     g1.add_edge(0, 1, 2);
@@ -191,7 +257,7 @@ void testcases()
     g1.add_edge(2, 6, 2);
     g1.add_edge(4, 6, 2);
     g1.add_edge(3, 4, 6);
-    g1.shortest_path(0);
+    g1.dijkstra_destination(0);
 }
 int main()
 {
