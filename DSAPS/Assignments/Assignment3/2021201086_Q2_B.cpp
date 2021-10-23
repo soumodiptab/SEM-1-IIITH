@@ -1,6 +1,7 @@
 #include <iostream>
 #include <limits>
 #include <vector>
+#include <stack>
 using namespace std;
 class priority_queue_custom
 {
@@ -111,6 +112,7 @@ class graph
      * 
      */
     vector<vector<pair<int, int>>> weights;
+    vector<pair<int, vector<int>>> weight_paths;
 
 public:
     graph(int nodes)
@@ -125,65 +127,55 @@ public:
         weights[v].push_back(make_pair(weight, u));
         edges++;
     }
-    void print_paths(vector<vector<int>> &paths)
+    void print_paths(vector<string> &paths)
     {
         for (auto p : paths)
         {
-            for (auto vertex : p)
-            {
-                cout << vertex << " ";
-            }
-            cout << endl;
+            cout << p << endl;
         }
     }
     /**
      * @brief create all possible paths
      * 
      */
-    vector<vector<int>> path_tracer(vector<vector<int>> &parent, int index)
+    vector<string> path_tracer(vector<vector<int>> &parent, int index)
     {
-        vector<vector<int>> paths;
+        vector<string> paths;
         if (index == -1)
         {
             return paths;
         }
         for (auto item : parent[index])
         {
-            vector<vector<int>> returned_paths = path_tracer(parent, item);
+            vector<string> returned_paths = path_tracer(parent, item);
             if (returned_paths.empty())
             {
-                vector<int> path;
-                path.push_back(index);
+                string path;
+                path = to_string(index);
                 paths.push_back(path);
             }
             else
             {
-                for (auto p : returned_paths)
+                for (auto &p : returned_paths)
                 {
-                    p.push_back(index);
+                    p = p + " " + to_string(index);
                     paths.push_back(p);
                 }
             }
         }
         return paths;
     }
-    vector<int> select_best_path(vector<vector<int>> &paths)
+    string select_best_path(vector<string> &paths)
     {
-        vector<int> min_path = paths[0];
+        string min_path = paths[0];
         for (int i = 1; i < paths.size(); i++)
         {
-            for (int j = 0; j < (min_path.size()) && (j < paths[i].size()); j++)
-            {
-                if (paths[i][j] < min_path[j])
-                {
-                    min_path = paths[i];
-                    break;
-                }
-            }
+            if (min_path.compare(paths[i]) > 0)
+                min_path = paths[i];
         }
         return min_path;
     }
-    vector<vector<int>> shortest_path(int source)
+    vector<pair<int, string>> shortest_path(int source)
     {
         vector<bool> visited(nodes, false);
         vector<int> distance(nodes, numeric_limits<int>::max());
@@ -216,24 +208,52 @@ public:
                 }
             }
         }
-        return parent;
-    }
-    void dijkstra_destination(int destination)
-    {
-        vector<vector<int>> parent = shortest_path(destination);
-        vector<vector<int>> all_node_paths;
+        vector<pair<int, string>> all_node_paths;
         for (int i = 0; i < nodes; i++)
         {
-            vector<vector<int>> all_paths = path_tracer(parent, i);
-            for (auto &p : all_paths)
+            int weight = distance[i];
+            if (i == source)
+                continue;
+            vector<string> all_paths = path_tracer(parent, i);
+            for (auto p : all_paths)
             {
-                reverse(p);
+                all_node_paths.push_back(make_pair(weight, p));
             }
-            vector<int> best = select_best_path(all_paths);
-            all_node_paths.push_back(best);
         }
-        all_node_paths.erase(all_node_paths.begin() + destination);
-        print_paths(all_node_paths);
+        return all_node_paths;
+    }
+    void dfs(int source, int destination, vector<bool> &visited, vector<int> path, int weight)
+    {
+        if (visited[source])
+            return;
+        if (weight != 0)
+            weight_paths.push_back(make_pair(weight, path));
+        visited[source] = true;
+        if (source == destination)
+        {
+            return;
+        }
+        for (auto i : weights[source])
+        {
+            path.push_back(i.second);
+            dfs(i.second, destination, visited, path, weight+i.first);
+            path.pop_back();
+        }
+    }
+    void get_all_paths()
+    {
+        /*vector<pair<int, string>> weight_paths;
+        for (int i = 0; i < nodes; i++)
+        {
+            vector<pair<int, string>> allinfo = shortest_path(i);
+            weight_paths.insert(weight_paths.end(), allinfo.begin(), allinfo.end());
+        }
+        */
+        vector<bool> visited(nodes, false);
+        vector<int> path;
+        path.push_back(0);
+        dfs(0, 3, visited, path, 0);
+        cout << "Hello";
     }
 };
 void kth_shortest_paths_solver()
@@ -247,8 +267,7 @@ void kth_shortest_paths_solver()
         cin >> a >> b >> c;
         g.add_edge(a, b, c);
     }
-    cin >> dest;
-    g.dijkstra_destination(dest);
+    g.get_all_paths();
 }
 int main()
 {
