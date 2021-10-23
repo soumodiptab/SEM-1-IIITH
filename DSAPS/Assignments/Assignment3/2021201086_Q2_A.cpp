@@ -2,18 +2,7 @@
 #include <limits>
 #include <vector>
 using namespace std;
-class tired_afk
-{
-    int number;
-    vector<tired_afk *> children;
-    tired_afk(int number)
-    {
-        this->number = number;
-        children = vector<tired_afk *>(number);
-    }
-};
-
-class priority_queue
+class priority_queue_custom
 {
     vector<pair<int, int>> key_value;
     int max = -1;
@@ -201,7 +190,7 @@ public:
         vector<vector<int>> parent = vector<vector<int>>(nodes);
         parent[source].push_back(-1);
         distance[source] = 0;
-        priority_queue pq = priority_queue();
+        priority_queue_custom pq = priority_queue_custom();
         pq.push(make_pair(0, source));
         while (!pq.empty())
         {
@@ -246,32 +235,22 @@ public:
         all_node_paths.erase(all_node_paths.begin() + destination);
         print_paths(all_node_paths);
     }
-    void k_shortest_paths()
-    {
-    }
 };
-void testcases()
+void shortest_path_solver()
 {
-    graph g(4);
-    g.add_edge(0, 1, 1);
-    g.add_edge(1, 3, 2);
-    g.add_edge(0, 3, 3);
-    g.add_edge(0, 2, 2);
-    g.add_edge(2, 3, 1);
-    g.dijkstra_destination(3);
-    cout << endl;
-    graph g1(7);
-    g1.add_edge(0, 1, 2);
-    g1.add_edge(1, 2, 1);
-    g1.add_edge(1, 3, 3);
-    g1.add_edge(0, 5, 5);
-    g1.add_edge(5, 6, 1);
-    g1.add_edge(2, 6, 2);
-    g1.add_edge(4, 6, 2);
-    g1.add_edge(3, 4, 6);
-    g1.dijkstra_destination(0);
+    int vertex, edges;
+    cin >> vertex >> edges;
+    int a, b, c, dest;
+    graph g(vertex);
+    for (int i = 1; i <= edges; i++)
+    {
+        cin >> a >> b >> c;
+        g.add_edge(a, b, c);
+    }
+    cin >> dest;
+    g.dijkstra_destination(dest);
 }
 int main()
 {
-    testcases();
+    shortest_path_solver();
 }
