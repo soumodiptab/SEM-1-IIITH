@@ -108,7 +108,7 @@ public:
                 }
             }
             if (visited[min.row][min.col] &&
-                (distance[start_position.row][start_position.col] == -1 ||
+                (!visited[start_position.row][start_position.col] ||
                  distance[min.row][min.col] < distance[start_position.row][start_position.col]))
             {
                 cout << "No" << endl;
