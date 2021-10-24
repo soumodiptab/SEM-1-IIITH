@@ -1,4 +1,4 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 class node
 {
@@ -16,11 +16,12 @@ class dictionary
 {
     int number_of_words = 0;
     node *root = new node();
+    vector<string> final_words;
     void traverse(node *current)
     {
         if (current->is_end)
         {
-            cout << current->word << " ";
+            final_words.push_back(current->word);
         }
         for (int i = 0; i < 26; i++)
         {
@@ -52,9 +53,10 @@ public:
         current->word = word;
         number_of_words++;
     }
-    void print_words()
+    vector<string> print_words()
     {
         traverse(root);
+        return final_words;
     }
 };
 class grid
@@ -127,8 +129,9 @@ public:
         }
         set(i, j, original);
     }
-    void solve(int x, string *word_list)
+    vector<string> solve(vector<string> word_list)
     {
+        int x = word_list.size();
         dictionary input_words, output_words;
         for (int i = 0; i < x; i++)
         {
@@ -141,36 +144,33 @@ public:
                 traverse_grid(i, j, input_words.get_root(), output_words);
             }
         }
-        output_words.print_words();
-        cout << endl;
+        return output_words.print_words();
     }
 };
-void driver()
+class Solution
 {
-    int row, col;
-    cin >> row >> col;
-    grid g = grid(row, col);
-    for (int i = 0; i < row; i++)
+public:
+    vector<string> findWords(vector<vector<char>> &board, vector<string> &words)
     {
-        for (int j = 0; j < col; j++)
+        int row, col;
+        row = board.size();
+        col = board[0].size();
+        grid g = grid(row, col);
+        for (int i = 0; i < row; i++)
         {
-            char temp;
-            cin >> temp;
-            g.set(i, j, temp);
+            for (int j = 0; j < col; j++)
+            {
+                g.set(i, j, board[i][j]);
+            }
         }
+        return g.solve(words);
     }
-    int x;
-    cin >> x;
-    string word_list[x];
-    for (int i = 0; i < x; i++)
-    {
-        cin >> word_list[i];
-    }
-    g.solve(x, word_list);
-}
+};
 int main()
 {
-    //freopen("input_3.txt", "r", stdin); // REMOVE THIS after testing gets completed.
-    driver();
-    return 0;
+    vector<vector<char>> b{{'o', 'a', 'a', 'n'}, {'e', 't', 'a', 'e'}, {'i', 'h', 'k', 'r'}, {'i', 'f', 'l', 'v'}};
+    vector<string> st{"oath", "pea", "eat", "rain"};
+    Solution s;
+    vector<string> sol = s.findWords(b, st);
+    sol[0];
 }

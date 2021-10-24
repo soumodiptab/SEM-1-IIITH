@@ -225,41 +225,6 @@ void testcases()
     vector<string> simlilar = dict.autocorrect("appl");
     print_vector(simlilar);
 }
-void test_case_medium()
-{
-    freopen("input_1.txt", "r", stdin);
-    int words, option;
-    string temp;
-    cin >> words;
-    dictionary dict = dictionary();
-    for (int i = 0; i < words; i++)
-    {
-        cin >> temp;
-        dict.insert_word(temp);
-    }
-    int testcases;
-    cin >> testcases;
-    while (testcases--)
-    {
-        cin >> option;
-        cin >> temp;
-        switch (option)
-        {
-        case 1:
-            cout << dict.spell_check(temp) << endl;
-            break;
-        case 2:
-            print_vector(dict.autocomplete(temp));
-            break;
-        case 3:
-            print_vector(dict.autocorrect(temp));
-            break;
-        default:
-            break;
-        }
-        cout << endl;
-    }
-}
 void driver()
 {
     int words, option;
@@ -291,7 +256,8 @@ void driver()
 int main()
 {
     //testcases();
-    //test_case_medium();
+    //freopen("input_1.txt", "r", stdin);
+    //freopen("output_1.txt", "w", stdout);
     driver();
     return 0;
 }
