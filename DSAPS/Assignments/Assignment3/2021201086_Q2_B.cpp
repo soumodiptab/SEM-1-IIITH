@@ -2,6 +2,7 @@
 #include <limits>
 #include <vector>
 #include <stack>
+#include <algorithm>
 using namespace std;
 class priority_queue_custom
 {
@@ -222,23 +223,25 @@ public:
         }
         return all_node_paths;
     }
-    void dfs(int source, int destination, vector<bool> &visited, vector<int> path, int weight)
+    void dfs(int source, int destination, vector<bool> visited, vector<int> path, int weight)
     {
         if (visited[source])
             return;
-        if (weight != 0)
-            weight_paths.push_back(make_pair(weight, path));
         visited[source] = true;
         if (source == destination)
         {
+            weight_paths.push_back(make_pair(weight, path));
             return;
         }
         for (auto i : weights[source])
         {
             path.push_back(i.second);
-            dfs(i.second, destination, visited, path, weight+i.first);
+            dfs(i.second, destination, visited, path, weight + i.first);
             path.pop_back();
         }
+    }
+    void cleanup()
+    {
     }
     void get_all_paths()
     {
@@ -249,10 +252,21 @@ public:
             weight_paths.insert(weight_paths.end(), allinfo.begin(), allinfo.end());
         }
         */
-        vector<bool> visited(nodes, false);
-        vector<int> path;
-        path.push_back(0);
-        dfs(0, 3, visited, path, 0);
+
+        for (int source = 0; source < nodes; source++)
+        {
+            for (int destination = 0; destination < nodes; destination++)
+            {
+                if (source == destination)
+                    continue;
+                vector<bool> visited(nodes, false);
+                vector<int> path;
+                path.push_back(source);
+                dfs(source, destination, visited, path, 0);
+            }
+        }
+        sort(weight_paths.begin(), weight_paths.end());
+        cleanup();
         cout << "Hello";
     }
 };
@@ -271,5 +285,6 @@ void kth_shortest_paths_solver()
 }
 int main()
 {
+    freopen("input_2.txt", "r", stdin);
     kth_shortest_paths_solver();
 }
