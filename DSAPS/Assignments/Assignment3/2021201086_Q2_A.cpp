@@ -255,7 +255,7 @@ void shortest_path_solver()
 }
 int main()
 {
-    //freopen("graph.txt", "r", stdin);
-    //freopen("output_2_A.txt", "w", stdout);
+    freopen("graph.txt", "r", stdin);
+    freopen("output_2_A.txt", "w", stdout);
     shortest_path_solver();
 }
