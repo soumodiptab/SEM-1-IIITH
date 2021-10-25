@@ -39,7 +39,7 @@ public:
     {
         if (k >= weight_paths.size())
         {
-            return;
+            k = weight_paths.size();
         }
         for (int i = 0; i < k; i++)
         {

@@ -174,7 +174,7 @@ public:
         {
             for (int j = 0; j < (min_path.size()) && (j < paths[i].size()); j++)
             {
-                if (paths[i][j] < min_path[j])
+                if (to_string(paths[i][j]).compare(to_string(min_path[j])) < 0)
                 {
                     min_path = paths[i];
                     break;
@@ -224,6 +224,10 @@ public:
         vector<vector<int>> all_node_paths;
         for (int i = 0; i < nodes; i++)
         {
+            if (parent[i].empty() || i == destination)
+            {
+                continue;
+            }
             vector<vector<int>> all_paths = path_tracer(parent, i);
             for (auto &p : all_paths)
             {
@@ -232,7 +236,6 @@ public:
             vector<int> best = select_best_path(all_paths);
             all_node_paths.push_back(best);
         }
-        all_node_paths.erase(all_node_paths.begin() + destination);
         print_paths(all_node_paths);
     }
 };
@@ -252,5 +255,7 @@ void shortest_path_solver()
 }
 int main()
 {
+    //freopen("graph.txt", "r", stdin);
+    //freopen("output_2_A.txt", "w", stdout);
     shortest_path_solver();
 }
