@@ -39,18 +39,53 @@ def play_lucky_draw():
 
 
 def pattern1():
-    print("You won")
+    offset = 15
+    x_start = 1+offset
+    x_end = 6+offset
+    y_start = 1
+    y_end = 6
+    for i in range(1, y_end+1):
+        for j in range(1, x_end+1):
+            if ((i == y_start) or (i == y_end)) and (j > x_start and j < x_end):
+                print('*', end="")
+            elif((j == x_start or j == x_end) and (i != y_start and i != y_end)):
+                print('*', end="")
+            else:
+                print(' ', end="")
+        print()
 
 
 def pattern2():
-    print("You lose")
+    offset = 15
+    middle = 10
+    x_start = 1+offset
+    x_end = 2*6+middle+offset
+    y_start = 1
+    y_end = 5
+    points_to_print = []
+    for i in range(1, y_end+1):
+        for j in range(1, x_end+1):
+            if ((i == y_start) or (i == y_end)) and ((j > x_start and j < x_start+5) or (j > x_start+16 and j < x_end)):
+                print('*', end="")
+            elif((j == x_start or j == x_end or j == x_start+5 or j == x_start+16) and (i != y_start and i != y_end)):
+                print('|', end="")
+            else:
+                print(' ', end="")
+        print()
+    print()
+    for i in range(1, offset+1):
+        print(" ", end="")
+    print("          {}")
+    for i in range(1, offset+1):
+        print(" ", end="")
+    print("    ______________")
 
 
 def patterns(val):
     if val < 0:
-        pattern1()
-    else:
         pattern2()
+    else:
+        pattern1()
 
 
 path = 'Menu.csv'
@@ -74,14 +109,14 @@ item_list[item_id]=[half,full]
 while True:
     item_id = int(input("Enter item id ?\n"))
     plate = int(input("Half or Full plate ?(1-full 2-half)\n"))
-    qty =int(input(""))
+    qty = int(input("How many do you want to order ?\n"))
     more = input("Wanna add anymore items ?(Y/N)\n")
     if item_id not in item_list.keys():
         item_list[item_id] = [0, 0]
     if plate == 2:
-        item_list[item_id][0] += 1
+        item_list[item_id][0] += qty
     else:
-        item_list[item_id][1] += 1
+        item_list[item_id][1] += qty
     if more == 'N':
         break
 print_line()
@@ -92,22 +127,21 @@ if choice == 2:
     tip = 10
 elif choice == 3:
     tip = 20
-print("TOTAL:")
 total = 0
 for item_id in item_list.keys():
-    total = total+item_list[item_id][0] * \
-        rows[item_id][0]+item_list[item_id][1]*rows[item_id][1]
+    total = float(total+item_list[item_id][0] *
+                  rows[item_id][0]+item_list[item_id][1]*rows[item_id][1])
 """
 finding the total of partial/full items from the booked order
 """
 total_after_tip = total+total*(tip/100)
-print(round(total_after_tip, 2))
+print(f"TOTAL: {total_after_tip:.2f}")
 split_flag = input("Wanna split the bill ?(Y/N)\n")
 people = 1
 if split_flag == 'Y':
-    people = int(input("How many ?\n"))
+    people = int(input("How many people?\n"))
     split_bill = total_after_tip/people
-    print("Total of each person [", people, "] :\n", round(split_bill, 2))
+    print("Total of each person [", people, "] :", f"{split_bill:.2f}")
 lucky_flag = input(
     "Do you want to try our promotional offer 'Test your luck' ?(Y/N)\n")
 perc = 0
@@ -118,17 +152,18 @@ print_line()
 final_total = 0
 for item_id in item_list.keys():
     if item_list[item_id][0] != 0:
-        print("Item ", item_id, "[Half][", item_list[item_id]
-              [0], "]: ", item_list[item_id][0]*rows[item_id][0])
+        print("Item ", item_id, "[Half][", item_list[item_id][0],
+              "]: ", f"{item_list[item_id][0]*rows[item_id][0]:.2f}")
     if item_list[item_id][1] != 0:
         print("Item ", item_id, "[Full][", item_list[item_id]
-              [1], "]: ", item_list[item_id][1]*rows[item_id][1])
-print("Total: ", total)
+              [1], "]: ", f"{item_list[item_id][1]*rows[item_id][1]:.2f}")
+print("Total: ", f"{total:.2f}")
 print("Tip Percentage: ", tip, "%")
-print("Discount/Increase: ", perc, "%")
-final_total = total_after_tip+total_after_tip*(perc/100)
-print("Final Total: ", round(final_total, 2))
+perc_value = total_after_tip*(perc/100)
+print("Discount/Increase: ", f"{perc_value:.2f}")
+final_total = total_after_tip+perc_value
+print(f"Final Total: {final_total:.2f}")
 if split_flag == 'Y':
     split_final_bill = final_total/people
     print("Bill for each person [", people,
-          "] :\n", round(split_final_bill, 2))
+          "] :", f"{split_final_bill:.2f}")
