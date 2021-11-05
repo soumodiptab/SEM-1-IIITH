@@ -9,20 +9,20 @@ def print_line():
     print("-----------------------------------------------------------")
 
 
-def display_menu(rows, header):
+def display_menu(items, header):
     """
     Displays the menu for the order selection
 
     Args:
-        rows : the items extracted from the menu.csv
+        items : the items extracted from the menu.csv
         header : headers to be displayed
     """
     print("MENU")
     print_line()
     print(header[0], '\t', header[1], '\t', header[2])
     print_line()
-    for k in rows.keys():
-        print(k, '\t\t', rows[k][0], '\t\t', rows[k][1])
+    for k in items.keys():
+        print(k, '\t\t', items[k][0], '\t\t', items[k][1])
         print_line()
 
 
@@ -42,13 +42,14 @@ def pattern1():
     Prints the pattern for losing
     """
     offset = 15
-    x_start = 1+offset
-    x_end = 6+offset
+    x_start = 1 + offset
+    x_end = 6 + offset
     y_start = 1
     y_end = 6
-    for i in range(1, y_end+1):
-        for j in range(1, x_end+1):
-            if ((i == y_start) or (i == y_end)) and (j > x_start and j < x_end):
+    for i in range(1, y_end + 1):
+        for j in range(1, x_end + 1):
+            if ((i == y_start) or (i == y_end)) and (
+                    j > x_start and j < x_end):
                 print('*', end="")
             elif((j == x_start or j == x_end) and (i != y_start and i != y_end)):
                 print('*', end="")
@@ -64,31 +65,37 @@ def pattern2():
     """
     offset = 15
     middle = 10
-    x_start = 1+offset
-    x_end = 2*6+middle+offset
+    x_start = 1 + offset
+    x_end = 2 * 6 + middle + offset
     y_start = 1
     y_end = 5
-    points_to_print = []
-    for i in range(1, y_end+1):
-        for j in range(1, x_end+1):
-            if ((i == y_start) or (i == y_end)) and ((j > x_start and j < x_start+5) or (j > x_start+16 and j < x_end)):
+    for i in range(1, y_end + 1):
+        for j in range(1, x_end + 1):
+            if ((i == y_start) or (i == y_end)) and (
+                    (j > x_start and j < x_start + 5) or (j > x_start + 16 and j < x_end)):
                 print('*', end="")
-            elif((j == x_start or j == x_end or j == x_start+5 or j == x_start+16) and (i != y_start and i != y_end)):
+            elif((j == x_start or j == x_end or j == x_start + 5 or j == x_start + 16)
+                 and (i != y_start and i != y_end)):
                 print('|', end="")
             else:
                 print(' ', end="")
         print()
     print()
-    for i in range(1, offset+1):
+    for i in range(1, offset + 1):
         print(" ", end="")
     print("          {}")
-    for i in range(1, offset+1):
+    for i in range(1, offset + 1):
         print(" ", end="")
     print("    ______________")
     print()
 
 
 def patterns(val):
+    """patterns [summary]
+
+    Args:
+        val (int): [asdas]
+    """
     if val < 0:
         pattern2()
     else:
@@ -109,14 +116,14 @@ def promotional_offer_menu():
     print_line()
 
 
-path = 'Menu.csv'
+PATH = 'Menu.csv'
 headers = []
 rows = {}
 """
 rows[0] - half
 rows[1] - full
 """
-file = open(path)
+file = open(PATH)
 csvreader = csv.reader(file)
 headers = next(csvreader)
 for row in csvreader:
@@ -148,28 +155,28 @@ if choice == 2:
     tip = 10
 elif choice == 3:
     tip = 20
-total = 0
+TOTAL = 0
 for item_id in item_list.keys():
-    total = float(total+item_list[item_id][0] *
-                  rows[item_id][0]+item_list[item_id][1]*rows[item_id][1])
+    TOTAL = float(TOTAL + item_list[item_id][0]
+                  * rows[item_id][0] + item_list[item_id][1] * rows[item_id][1])
 """
 finding the total of partial/full items from the booked order
 """
-total_after_tip = total+total*(tip/100)
+total_after_tip = TOTAL + TOTAL * (tip / 100)
 print(f"TOTAL: {total_after_tip:.2f}")
 split_flag = input("Wanna split the bill ?(Y/N)\n")
-people = 1
+PEOPLE = 1
 if split_flag == 'Y':
-    people = int(input("How many people?\n"))
-    split_bill = total_after_tip/people
-    print("Total of each person [", people, "] :", f"{split_bill:.2f}")
+    PEOPLE = int(input("How many people?\n"))
+    split_bill = total_after_tip / PEOPLE
+    print("Total of each person [", PEOPLE, "] :", f"{split_bill:.2f}")
 promotional_offer_menu()
 lucky_flag = input("So do you want to try ?(Y/N)\n")
 perc = 0
 if lucky_flag == 'Y':
     perc = play_lucky_draw()
 patterns(perc)
-perc_value = total_after_tip*(perc/100)
+perc_value = total_after_tip * (perc / 100)
 print("Discount/Increase: ", end="")
 if(perc_value > 0):
     print("+", end="")
@@ -183,16 +190,16 @@ for item_id in item_list.keys():
     if item_list[item_id][1] != 0:
         print("Item ", item_id, "[Full][", item_list[item_id]
               [1], "]: ", f"{item_list[item_id][1]*rows[item_id][1]:.2f}")
-print("Total: ", f"{total:.2f}")
+print("Total: ", f"{TOTAL:.2f}")
 print("Tip Percentage: ", tip, "%")
 
 print("Discount/Increase: ", end="")
-if(perc_value > 0):
+if perc_value > 0:
     print("+", end="")
 print(f"{perc_value:.2f}")
-final_total = total_after_tip+perc_value
+final_total = total_after_tip + perc_value
 print(f"Final Total: {final_total:.2f}")
 if split_flag == 'Y':
-    split_final_bill = final_total/people
-    print("Bill for each person [", people,
+    split_final_bill = final_total / PEOPLE
+    print("Bill for each person [", PEOPLE,
           "] :", f"{split_final_bill:.2f}")
