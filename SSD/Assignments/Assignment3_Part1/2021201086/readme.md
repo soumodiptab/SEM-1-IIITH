@@ -84,7 +84,7 @@ Y
                *    *
                *    *
                 **** 
-Discount Increase/Decrease : 0.00
+Discount/Increase : 0.00
 ```
 In the promotional offer section take input whether to participate in the lucky draw.
 The lucky draw has a weighted probabilty.
