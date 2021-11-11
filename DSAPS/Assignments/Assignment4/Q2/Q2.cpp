@@ -148,7 +148,7 @@ void merge_sort(vector<LONG> &arr, LONG start, LONG end)
 }
 LONG get_data_count(string filename)
 {
-    LONG data_count;
+    LONG data_count = 0;
     fstream file;
     string buffer;
     file.open(filename, ios::in);
@@ -194,6 +194,8 @@ LONG create_sorted_blocks(string input)
     LONG last_block_count = total_file_data_count % BLOCK_SIZE;
     if (last_block_count)
         blocks += 1;
+    else
+        last_block_count = BLOCK_SIZE;
     fstream file;
     file.open(input, ios::in);
     LONG k = blocks;
@@ -265,6 +267,6 @@ int main(int argc, char *argv[])
     auto start_time = std::chrono::high_resolution_clock::now();
     external_sort(input_file, output_file);
     auto end_time = std::chrono::high_resolution_clock::now();
-    cout << "Time elapsed:" << chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count() << endl;
+    cout << "Time elapsed:" << chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count() << "ms" << endl;
     return 0;
 }
