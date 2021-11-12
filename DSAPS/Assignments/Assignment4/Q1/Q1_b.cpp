@@ -129,13 +129,11 @@ public:
         return array.size();
     }
 };
-
 int main()
 {
     string word;
     cin >> word;
     suffix_array n = suffix_array();
     n.create_suffix_array(word);
-    n.print_suffix_array();
     return 0;
 }

@@ -1,5 +1,5 @@
 /**
- * @file Q1.cpp
+ * @file Q1_c.cpp
  * @author Soumodipta Bose
  * @brief Construction of suffix array
  * @version 0.1
@@ -129,13 +129,26 @@ public:
         return array.size();
     }
 };
-
+void sol(string word)
+{
+    string rev_word = word;
+    reverse(rev_word.begin(), rev_word.end());
+    suffix_array suf = suffix_array(word + "$" + rev_word);
+    suf.create_suffix_array(word);
+    int maxi = 0;
+    for (int i = 0; i < suf.size() - 1; i++)
+    {
+        if (suf.array[i].index < word.size() && suf.array[i + 1].index > word.size() || suf.array[i].index > word.size() && suf.array[i + 1].index < word.size())
+        {
+            maxi = max((int)suf.array[i].suffix.size(), maxi);
+        }
+    }
+    cout << maxi << endl;
+}
 int main()
 {
     string word;
     cin >> word;
-    suffix_array n = suffix_array();
-    n.create_suffix_array(word);
-    n.print_suffix_array();
+    sol(word);
     return 0;
 }
