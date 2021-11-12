@@ -108,7 +108,7 @@ class Converter
 public:
     Converter()
     {
-        max_bits = 40;
+        max_bits = 63;
     }
     Converter(int max_bits)
     {

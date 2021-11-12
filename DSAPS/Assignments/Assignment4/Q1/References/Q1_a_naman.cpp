@@ -13,7 +13,7 @@ void printSFX(sfx arr[], int n)
 {
     for (int i = 0; i < n; i++)
     {
-        cout << arr[i].index << "      " << arr[i].suffix << "        " << arr[i].rank << "      " << arr[i].nextRank << endl;
+        cout << arr[i].index << "\t" << arr[i].rank << "\t" << arr[i].nextRank << "\t" << arr[i].suffix << endl;
     }
     cout << endl
          << "-------------------------------------------------------------------------------------------------------" << endl;
@@ -41,14 +41,14 @@ int main()
     for (int i = 0; i < len; i++)
     {
         arr[i].suffix = str.substr(i, len);
-        arr[i].rank = arr[i].suffix[0] - (int)'a';
+        arr[i].rank = arr[i].suffix[0];
         arr[i].index = i;
-        arr[i].nextRank = i == len - 1 ? -1 : arr[i].suffix[1] - (int)'a';
+        arr[i].nextRank = i == len - 1 ? -1 : arr[i].suffix[1];
     }
-
     //printSFX(arr,len);
     sort(arr, arr + len, comparator);
     //printSFX(arr,len);
+    printSFX(arr, len);
     for (int jump = 4; jump < len; jump *= 2)
     {
         int r = 0;
@@ -68,7 +68,7 @@ int main()
                 prev = current;
             }
         }
-        //printSFX(arr,len);
+        printSFX(arr,len);
 
         int pos[len];
 
@@ -84,7 +84,7 @@ int main()
         //printSFX(arr,len);
         sort(arr, arr + len, comparator);
     }
-
+    printSFX(arr, len);
     for (int i = 0; i < len; i++)
     {
         if (arr[i].suffix.length() >= len / 2)
