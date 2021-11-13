@@ -85,7 +85,7 @@ public:
     void create_suffix_array(string s)
     {
         init(s);
-        print_suffix_array();
+        //print_suffix_array();
         for (int iter = 4; iter < array.size(); iter *= 2)
         {
             int init_rank = 0;
@@ -122,18 +122,47 @@ public:
             }
             sort(array.begin(), array.end(), compare);
         }
-        print_suffix_array();
+        //print_suffix_array();
     }
     int size()
     {
         return array.size();
     }
 };
+string prefix_matcher(string a, string b)
+{
+    int i = 0;
+    string lcp = "";
+    while (i < a.size() && i < b.size() && a[i] == b[i])
+    {
+        lcp.push_back(a[i++]);
+    }
+    return lcp;
+}
+void sol(string word, int k)
+{
+    suffix_array suf = suffix_array();
+    suf.create_suffix_array(word);
+    string max_lcp = "";
+    for (int i = 0; i <= suf.size() - k; i++) // Run from i = 0 to i= length - k
+    {
+        //  check if prefix exists at k-1th position
+        string lcp = prefix_matcher(suf.array[i].suffix, suf.array[i + k - 1].suffix);
+        if (lcp.size() > max_lcp.size())
+        {
+            max_lcp = lcp;
+        }
+    }
+    int length = -1;
+    if (!max_lcp.empty())
+        length = max_lcp.size();
+    cout << length << endl;
+}
 int main()
 {
     string word;
-    cin >> word;
-    suffix_array n = suffix_array();
-    n.create_suffix_array(word);
+    int k;
+    cin >> word >> k;
+    sol(word, k);
     return 0;
 }
