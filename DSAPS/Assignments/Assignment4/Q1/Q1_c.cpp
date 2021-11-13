@@ -129,21 +129,41 @@ public:
         return array.size();
     }
 };
+string prefix_matcher(string a, string b)
+{
+    int i = 0;
+    string lcp = "";
+    while (i < a.size() && i < b.size() && a[i] == b[i])
+    {
+        lcp.push_back(a[i++]);
+    }
+    return lcp;
+}
 void sol(string word)
 {
     string rev_word = word;
-    reverse(rev_word.begin(), rev_word.end());
-    suffix_array suf = suffix_array(word + "$" + rev_word);
-    suf.create_suffix_array(word);
-    int maxi = 0;
+    reverse(word.begin(), word.end());
+    suffix_array suf = suffix_array();
+    string final_string = word + "#" + rev_word;
+    suf.create_suffix_array(final_string);
+    vector<int> prefix_store(suf.size(), 0);
+    for (int i = 1; i < suf.size(); i++)
+    {
+        prefix_store[i] = prefix_matcher(suf.array[i - 1].suffix, suf.array[i].suffix).size();
+    }
+    string palindrome = "";
     for (int i = 0; i < suf.size() - 1; i++)
     {
-        if (suf.array[i].index < word.size() && suf.array[i + 1].index > word.size() || suf.array[i].index > word.size() && suf.array[i + 1].index < word.size())
+        if ((suf.array[i].index > word.size() && suf.array[i + 1].index < word.size()) || (suf.array[i].index < word.size() && suf.array[i + 1].index > word.size()))
         {
-            maxi = max((int)suf.array[i].suffix.size(), maxi);
+            string temp = final_string.substr(suf.array[i + 1].index, prefix_store[i + 1]);
+            if (temp.size() > palindrome.size())
+            {
+                palindrome = temp;
+            }
         }
     }
-    cout << maxi << endl;
+    cout << palindrome << endl;
 }
 int main()
 {

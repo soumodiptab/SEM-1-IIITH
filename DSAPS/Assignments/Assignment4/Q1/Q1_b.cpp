@@ -1,7 +1,7 @@
 /**
  * @file Q1.cpp
  * @author Soumodipta Bose
- * @brief Construction of suffix array
+ * @brief Find length of the Longest substring of occurence greater than equals k
  * @version 0.1
  * @date 2021-11-11
  * 
