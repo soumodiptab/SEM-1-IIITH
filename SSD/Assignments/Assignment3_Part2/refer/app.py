@@ -1,7 +1,7 @@
 from enum import unique
 from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, login_manager, login_user, logout_user, login_required, UserMixin
+from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
 
 
 app = Flask(__name__)

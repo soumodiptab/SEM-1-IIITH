@@ -11,6 +11,7 @@
 #include <iostream>
 #include <vector>
 #include <chrono>
+#include <algorithm>
 #include <fstream>
 #define LONG long long int
 using namespace std;
@@ -205,7 +206,7 @@ LONG create_sorted_blocks(string input)
             block_to_vector(file, BLOCK_SIZE);
         else
             block_to_vector(file, last_block_count);
-        apply_merge_Sort();
+        sort(temp_vector.begin(), temp_vector.end());
         create_temp_file(blocks - k - 1);
     }
     file.close();
