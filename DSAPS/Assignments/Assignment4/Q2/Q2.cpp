@@ -268,6 +268,6 @@ int main(int argc, char *argv[])
     auto start_time = std::chrono::high_resolution_clock::now();
     external_sort(input_file, output_file);
     auto end_time = std::chrono::high_resolution_clock::now();
-    cout << "Time elapsed:" << chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count() << "ms" << endl;
+    cout << "Time elapsed:" << chrono::duration_cast<chrono::seconds>(end_time - start_time).count() << "s" << endl;
     return 0;
 }
