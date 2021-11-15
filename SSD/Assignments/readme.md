@@ -17,8 +17,9 @@
 3. Order-
     * transactionid
     * itemid - id
-    * half/full - boolean
-    * qty
+    * plate - HALF/FULL
+    * quantity
+    * price
 4. Transaction-
     * userid
     * transactionid (auto generated)
@@ -33,9 +34,10 @@
 * `/menu/fetch` : `GET`
 * `/user/create`: `POST` -> create new user in db
 * `/user/login`: `POST` -> login user and add to session
-* `/transaction/entry` :
-* `/order/entry` :
-* `/transaction/fetch` :
+* `/transaction/entry` : `POST`
+* `/order/entry` : `POST`
+* `/transaction/fetch` : `GET`-> Fetch details of single transaction(transaction id)
+* `/transaction/all` : `GET`-> Fetch all transactions
 
 # Client script operations :
 1. Options -
@@ -53,3 +55,33 @@
         * View previous Bills
         * Add new item in menu
         * Logout
+# Transaction structure:
+
+```json
+{
+   "total": 1246.90,
+   "tip": 10.00,
+   "discount": -133,
+   "split": 5,
+   "orders": [
+      {
+         "itemid": 1,
+         "plate": "FULL",
+         "quantity": 3,
+         "price": 120
+      },
+      {
+         "itemid": 1,
+         "plate": "HALF",
+         "quantity": 3,
+         "price": 234
+      },
+      {
+         "itemid": 2,
+         "plate": "FULL",
+         "quantity": 3,
+         "price": 245
+      }
+   ]
+}
+```
