@@ -37,7 +37,6 @@ class suffix_node
 {
 public:
     int index;
-    string suffix;
     int rank;
     int next_rank;
 };
@@ -51,6 +50,7 @@ bool compare(suffix_node a, suffix_node b)
 }
 class suffix_array
 {
+    string word;
     vector<suffix_node> array;
 
 public:
@@ -59,18 +59,18 @@ public:
     {
         for (int i = 0; i < array.size(); i++)
         {
-            cout << array[i].index << "\t" << array[i].rank << "\t" << array[i].next_rank << "\t" << array[i].suffix << endl;
+            cout << array[i].index << "\t" << array[i].rank << "\t" << array[i].next_rank << "\t" << word.substr(array[i].index, word.size() - array[i].index) << endl;
         }
         cout << endl;
     }
     void init(string &s)
     {
         array.clear();
-        for (int i = 0; i < s.size(); i++)
+        word = s;
+        for (int i = 0; i < word.size(); i++)
         {
-            string temp = s.substr(i, s.size());
+            string temp = word.substr(i, word.size());
             suffix_node new_node = suffix_node();
-            new_node.suffix = temp;
             new_node.index = i;
             new_node.rank = temp[0];
             new_node.next_rank = (temp.size() == 1) ? -1 : temp[1];
@@ -125,9 +125,9 @@ public:
         int target_length = array.size() / 2;
         for (int i = 0; i < array.size(); i++)
         {
-            if (array[i].suffix.size() >= target_length)
+            if ((word.size() - array[i].index) >= target_length)
             {
-                return array[i].suffix.substr(0, target_length);
+                return word.substr(array[i].index, target_length);
             }
         }
         return "";
@@ -136,6 +136,7 @@ public:
 
 int main()
 {
+    //freopen("test_input.txt", "r", stdin);
     string word;
     cin >> word;
     word.append(word);

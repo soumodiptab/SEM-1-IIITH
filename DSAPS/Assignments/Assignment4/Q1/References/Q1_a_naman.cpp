@@ -48,7 +48,7 @@ int main()
     //printSFX(arr,len);
     sort(arr, arr + len, comparator);
     //printSFX(arr,len);
-    printSFX(arr, len);
+    //printSFX(arr, len);
     for (int jump = 4; jump < len; jump *= 2)
     {
         int r = 0;
@@ -68,7 +68,7 @@ int main()
                 prev = current;
             }
         }
-        printSFX(arr,len);
+        //printSFX(arr,len);
 
         int pos[len];
 
@@ -84,7 +84,7 @@ int main()
         //printSFX(arr,len);
         sort(arr, arr + len, comparator);
     }
-    printSFX(arr, len);
+    //printSFX(arr, len);
     for (int i = 0; i < len; i++)
     {
         if (arr[i].suffix.length() >= len / 2)

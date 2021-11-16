@@ -37,7 +37,6 @@ class suffix_node
 {
 public:
     int index;
-    string suffix;
     int rank;
     int next_rank;
 };
@@ -51,30 +50,26 @@ bool compare(suffix_node a, suffix_node b)
 }
 class suffix_array
 {
-
 public:
+    string word;
     vector<suffix_node> array;
     suffix_array() {}
-    suffix_array(string s)
-    {
-        create_suffix_array(s);
-    }
     void print_suffix_array()
     {
         for (int i = 0; i < array.size(); i++)
         {
-            cout << array[i].index << "\t" << array[i].rank << "\t" << array[i].next_rank << "\t" << array[i].suffix << endl;
+            cout << array[i].index << "\t" << array[i].rank << "\t" << array[i].next_rank << "\t" << word.substr(array[i].index, word.size() - array[i].index) << endl;
         }
         cout << endl;
     }
     void init(string &s)
     {
         array.clear();
-        for (int i = 0; i < s.size(); i++)
+        word = s;
+        for (int i = 0; i < word.size(); i++)
         {
-            string temp = s.substr(i, s.size());
+            string temp = word.substr(i, word.size());
             suffix_node new_node = suffix_node();
-            new_node.suffix = temp;
             new_node.index = i;
             new_node.rank = temp[0];
             new_node.next_rank = (temp.size() == 1) ? -1 : temp[1];
@@ -128,6 +123,10 @@ public:
     {
         return array.size();
     }
+    string get_suffix(int i)
+    {
+        return word.substr(array[i].index, word.size());
+    }
 };
 string prefix_matcher(string a, string b)
 {
@@ -144,10 +143,12 @@ void sol(string word, int k)
     suffix_array suf = suffix_array();
     suf.create_suffix_array(word);
     string max_lcp = "";
+    suf.get_suffix(0);
+
     for (int i = 0; i <= suf.size() - k; i++) // Run from i = 0 to i= length - k
     {
         //  check if prefix exists at k-1th position
-        string lcp = prefix_matcher(suf.array[i].suffix, suf.array[i + k - 1].suffix);
+        string lcp = prefix_matcher(suf.get_suffix(i), suf.get_suffix(i + k - 1));
         if (lcp.size() > max_lcp.size())
         {
             max_lcp = lcp;

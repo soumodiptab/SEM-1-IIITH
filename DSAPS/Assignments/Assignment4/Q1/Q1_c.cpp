@@ -37,7 +37,6 @@ class suffix_node
 {
 public:
     int index;
-    string suffix;
     int rank;
     int next_rank;
 };
@@ -51,30 +50,26 @@ bool compare(suffix_node a, suffix_node b)
 }
 class suffix_array
 {
-
 public:
+    string word;
     vector<suffix_node> array;
     suffix_array() {}
-    suffix_array(string s)
-    {
-        create_suffix_array(s);
-    }
     void print_suffix_array()
     {
         for (int i = 0; i < array.size(); i++)
         {
-            cout << array[i].index << "\t" << array[i].rank << "\t" << array[i].next_rank << "\t" << array[i].suffix << endl;
+            cout << array[i].index << "\t" << array[i].rank << "\t" << array[i].next_rank << "\t" << word.substr(array[i].index, word.size() - array[i].index) << endl;
         }
         cout << endl;
     }
     void init(string &s)
     {
         array.clear();
-        for (int i = 0; i < s.size(); i++)
+        word = s;
+        for (int i = 0; i < word.size(); i++)
         {
-            string temp = s.substr(i, s.size());
+            string temp = word.substr(i, word.size());
             suffix_node new_node = suffix_node();
-            new_node.suffix = temp;
             new_node.index = i;
             new_node.rank = temp[0];
             new_node.next_rank = (temp.size() == 1) ? -1 : temp[1];
@@ -85,7 +80,7 @@ public:
     void create_suffix_array(string s)
     {
         init(s);
-        print_suffix_array();
+        //print_suffix_array();
         for (int iter = 4; iter < array.size(); iter *= 2)
         {
             int init_rank = 0;
@@ -122,11 +117,15 @@ public:
             }
             sort(array.begin(), array.end(), compare);
         }
-        print_suffix_array();
+        //print_suffix_array();
     }
     int size()
     {
         return array.size();
+    }
+    string get_suffix(int i)
+    {
+        return word.substr(array[i].index, word.size());
     }
 };
 string prefix_matcher(string a, string b)
@@ -149,7 +148,7 @@ void sol(string word)
     vector<int> prefix_store(suf.size(), 0);
     for (int i = 1; i < suf.size(); i++)
     {
-        prefix_store[i] = prefix_matcher(suf.array[i - 1].suffix, suf.array[i].suffix).size();
+        prefix_store[i] = prefix_matcher(suf.get_suffix(i - 1), suf.get_suffix(i)).size();
     }
     string palindrome = "";
     for (int i = 0; i < suf.size() - 1; i++)
