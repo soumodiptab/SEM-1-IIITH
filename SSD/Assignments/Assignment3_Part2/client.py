@@ -98,10 +98,16 @@ def promotional_offer_menu():
 
 
 def print_line():
+    """
+    Prints a line
+    """
     print('----------------------------------------------------------------------------')
 
 
 def do_signup():
+    """
+    Contacts the rest endpoint to signup and create a new user
+    """
     username = input('Enter new username\n')
     password = input('Enter password\n')
     data = {'username': username, 'password': password}
@@ -110,11 +116,17 @@ def do_signup():
 
 
 def do_logout():
+    """
+    Logs out the current user
+    """
     response = requests.get('http://localhost:8000//user/logout', cookies=cookies).json()
     print(response['msg'])
 
 
 def menu():
+    """
+    Print the user menu after login
+    """
     print_line()
     print('1. Preview menu')
     print('2. Order Item')
@@ -127,6 +139,9 @@ def menu():
 
 
 def premenufetch():
+    """
+    Fetches the item menu incase user decides to order without reading the menu
+    """
     global menuitems
     menuitems = {}
     response = requests.get('http://localhost:8000//menu/fetch', cookies=cookies).json()
@@ -138,6 +153,9 @@ def premenufetch():
 
 
 def displaymenuitems():
+    """
+    Displays the item menu with half/full plate
+    """
     global menuitems
     response = requests.get('http://localhost:8000//menu/fetch', cookies=cookies).json()
     menudata = response['items']
@@ -155,6 +173,9 @@ def displaymenuitems():
 
 
 def addmenuitem():
+    """
+    Adds an item to the menu (only by chef)
+    """
     itemid = int(input('Enter item id\n'))
     halfprice = int(input('Enter price of Half plate\n'))
     fullprice = int(input('Enter price of Full plate\n'))
@@ -164,6 +185,9 @@ def addmenuitem():
 
 
 def viewbill(transaction):
+    """
+    view a transaction in detail
+    """
     print_line()
     orderlist = transaction['orders']
     total = float(0)
@@ -190,6 +214,9 @@ def viewbill(transaction):
 
 
 def viewtransactions():
+    """
+    View minimal information of  a transaction
+    """
     response = requests.get('http://localhost:8000///transaction/all', cookies=cookies).json()
     transactions = response['transactions']
     if not transactions:
@@ -214,6 +241,9 @@ def viewtransactions():
 
 
 def orderitem():
+    """
+    Order an item and add it to the order queue
+    """
     item_id = int(input("Enter item id ?\n"))
     if item_id not in menuitems.keys():
         print('Wrong item id')
@@ -240,6 +270,9 @@ def orderitem():
 
 
 def generatebill():
+    """
+    Create current bill of currently ordered items
+    """
     global orders
     if len(orders) == 0:
         print('No items ordered')
@@ -304,6 +337,9 @@ def postlogin():
 
 
 def do_login():
+    """
+    Login the user/chef and store a cookie at the client side
+    """
     global CHEF_STATUS
     username = input('Enter username\n')
     password = input('Enter password\n')
@@ -320,6 +356,9 @@ def do_login():
 
 
 def init_menu():
+    """
+    Initial menu
+    """
     print_line()
     print('Welcome')
     print_line()

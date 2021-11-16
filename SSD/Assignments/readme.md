@@ -32,10 +32,10 @@
 # Rest Endpoint :
 * `/menu/add` : `POST` 
 * `/menu/fetch` : `GET`
-* `/user/create`: `POST` -> create new user in db
-* `/user/login`: `POST` -> login user and add to session
-* `/transaction/entry` : `POST`
-* `/order/entry` : `POST`
+* `/user/signup`: `POST` -> create new user in db
+* `/user/login`: `GET` -> login user and add to session and send cookie
+* `/user/logout`: `GET` -> logout user from session and make cookie invalid
+* `/transaction/entry` : `POST` -> Store the transaction in database
 * `/transaction/fetch` : `GET`-> Fetch details of single transaction(transaction id)
 * `/transaction/all` : `GET`-> Fetch all transactions
 
