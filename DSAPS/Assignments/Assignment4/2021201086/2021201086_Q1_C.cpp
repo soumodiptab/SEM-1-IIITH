@@ -158,7 +158,10 @@ void sol(string word)
             string temp = final_string.substr(suf.array[i + 1].index, prefix_store[i + 1]);
             if (temp.size() > palindrome.size())
             {
-                palindrome = temp;
+                string rev_temp = temp;
+                reverse(rev_temp.begin(), rev_temp.end());
+                if (temp == rev_temp)
+                    palindrome = temp;
             }
         }
     }

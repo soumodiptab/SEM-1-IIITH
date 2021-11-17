@@ -109,6 +109,7 @@ public:
         return false;
     }
 };
+/*
 void merge(vector<LONG> &arr, LONG start, LONG mid, LONG end)
 {
     //cout << "start=" << start << " end= " << end << " arr1=" << mid - start + 1 << " arr2=" << end - mid << endl;
@@ -146,7 +147,7 @@ void merge_sort(vector<LONG> &arr, LONG start, LONG end)
     merge_sort(arr, start, middle);
     merge_sort(arr, middle + 1, end);
     merge(arr, start, middle, end);
-}
+}*/
 LONG get_data_count(string filename)
 {
     LONG data_count = 0;
@@ -171,10 +172,10 @@ void block_to_vector(fstream &file, LONG data_count)
         temp_vector.push_back(val);
     }
 }
-void apply_merge_Sort()
+/*void apply_merge_Sort()
 {
     merge_sort(temp_vector, 0, temp_vector.size() - 1);
-}
+}*/
 void create_temp_file(LONG offset)
 {
     fstream file;
