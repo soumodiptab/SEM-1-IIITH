@@ -32,6 +32,7 @@ int main()
 {
     string s;
     int k;
+    freopen("input.txt", "r", stdin);
     cin >> s >> k;
 
     string str = s;

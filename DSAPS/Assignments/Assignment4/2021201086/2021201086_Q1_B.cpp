@@ -164,6 +164,21 @@ int main()
     string word;
     int k;
     cin >> word >> k;
+    char c = word[0];
+    bool flag = true;
+    for (int i = 1; i < word.size(); i++)
+    {
+        if (c != word[i])
+        {
+            flag = false;
+            break;
+        }
+    }
+    if (flag)
+    {
+        cout << (word.size() - k + 1) << endl;
+        return 0;
+    }
     sol(word, k);
     return 0;
 }
