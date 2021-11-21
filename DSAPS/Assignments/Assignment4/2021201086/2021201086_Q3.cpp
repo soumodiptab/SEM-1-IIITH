@@ -149,13 +149,14 @@ void solve()
     Binarytrie bin = Binarytrie();
     Converter con = Converter();
     int elements, queries;
-    cin >> elements >> queries;
+    cin >> elements;
     for (int i = 0; i < elements; i++)
     {
         LONG number;
         cin >> number;
         bin.insert_word(con.binary_string(number));
     }
+    cin >> queries;
     while (queries--)
     {
         LONG number;
